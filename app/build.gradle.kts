@@ -113,26 +113,31 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.activity.ktx) // или более новая версия
+    implementation(libs.androidx.fragment.ktx) // или более новая версия
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // или более новая версия
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("androidx.compose.material3:material3:1.3.1")
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    //noinspection UseTomlInstead
     implementation("com.yandex.android:maps.mobile:4.5.0-lite")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     implementation("com.vk.id:vkid:2.3.1")
     implementation("com.vk.id:onetap-compose:2.3.1")
     implementation("com.vk.id:onetap-xml:2.3.1")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
