@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fragment_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Маршруты не найдены("
+        android:textSize="18sp"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/text_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Конечно они не найдены - собирайте базу данных!"
+        android:textSize="18sp"
+        android:layout_margin="10dp"/>
+    <Button
+        android:id="@+id/button_okey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Хорошо"
+        app:backgroundTint="@color/akcent"
+        android:textAppearance="@style/DefaultText"/>
+
+
+</LinearLayout>
