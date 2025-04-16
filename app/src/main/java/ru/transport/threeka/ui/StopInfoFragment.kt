@@ -45,7 +45,7 @@ class StopInfoFragment : Fragment() {
 
         val stopAbout = view.findViewById<TextView>(R.id.stop_about)
         val about = viewModel.getStopAbout(stop_id)
-        if (about == "Nothing" || about == ""){
+        if (about == "Nothing" || about == "" || about == "None"){
             stopAbout.visibility = View.GONE
         } else {
             stopAbout.text = viewModel.getStopAbout(stop_id)

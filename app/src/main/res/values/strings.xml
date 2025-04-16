@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">3KA</string>
+    <string name="base_url">http://10.0.2.2:80</string>
+    <string name="base_url0">http://192.168.238.180:80</string>
 </resources>

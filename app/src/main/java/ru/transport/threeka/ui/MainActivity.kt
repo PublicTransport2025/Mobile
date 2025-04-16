@@ -11,11 +11,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import com.yandex.mapkit.Animation
+
 
 import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.ScreenPoint
+import com.yandex.mapkit.ScreenRect
+import com.yandex.mapkit.geometry.Geometry
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.geometry.Polyline
+import com.yandex.mapkit.map.CameraListener
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.MapObject
+import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
@@ -37,6 +46,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var mapView: MapView
+    private var polylineObject: MapObject? = null
+
 
     private val placemarkTapListener = MapObjectTapListener { obj, _ ->
         //Toast.makeText(this@MainActivity,"${obj.userData}", Toast.LENGTH_SHORT).show()
@@ -51,6 +62,17 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             .add(R.id.fragment_container, fragment)
             .commit()
         true
+    }
+
+    private var stopsIconsCollection: MapObjectCollection? = null
+
+    private val cameraListener = CameraListener { _, newPosition, _, _ ->
+        Log.w("zoom", newPosition.zoom.toString())
+        if (newPosition.zoom > 13.9) {
+            stopsIconsCollection?.setVisible(true)
+        } else {
+            stopsIconsCollection?.setVisible(false)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,21 +99,26 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 /* tilt = */ 0.0f
             )
         )
+        Toast.makeText(
+            this@MainActivity,
+            "Увеличьте масштаб карты, чтобы отобразить остановки",
+            Toast.LENGTH_SHORT
+        ).show()
 
         val style =
             "[{\"tags\": {\"any\": [\"poi\", \"transit\"]}, \"stylers\": {\"visibility\": \"off\"}}]";
         mapView.mapWindow.map.setMapStyle(style);
 
-        val stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
+        stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         val imageProvider = ImageProvider.fromResource(this, R.drawable.stop)
 
-        stopsIconsCollection.addTapListener(placemarkTapListener)
+        stopsIconsCollection!!.addTapListener(placemarkTapListener)
 
 
         viewModel.loadStops()
         viewModel.stops.observe(this, Observer { stops ->
             for (i in stops.indices) {
-                stopsIconsCollection.addPlacemark().apply {
+                stopsIconsCollection!!.addPlacemark().apply {
                     geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
                     userData = i
                     setIcon(imageProvider)
@@ -119,48 +146,102 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             }
         })
 
+        viewModel.activeRoute.observe(this, Observer { route ->
+            if (route > 0) {
+                val existingFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (existingFragment != null) {
+                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                }
+                val fragment = SimpleRouteFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit()
+
+                val coords = viewModel.getRouteCoords()
+                val points = ArrayList<Point>()
+                for (coord in coords) {
+                    points.add(Point(coord.lat, coord.lon))
+                }
+                val polyline = Polyline(points)
+                if (polylineObject != null) {
+                    mapView.mapWindow.map.mapObjects.remove(polylineObject!!)
+                    polylineObject = null
+                }
+
+                val load = viewModel.getRouteLoad()
+                val color = when (load) {
+                    1 -> ContextCompat.getColor(this@MainActivity, R.color.load1)
+                    2 -> ContextCompat.getColor(this@MainActivity, R.color.load2)
+                    3 -> ContextCompat.getColor(this@MainActivity, R.color.load3)
+                    4 -> ContextCompat.getColor(this@MainActivity, R.color.load4)
+                    5 -> ContextCompat.getColor(this@MainActivity, R.color.load5)
+                    else -> ContextCompat.getColor(this@MainActivity, R.color.load0)
+                }
+
+                polylineObject = mapView.mapWindow.map.mapObjects.addPolyline(polyline).apply {
+                    strokeWidth = 6f
+                    setStrokeColor(color)
+                    outlineWidth = 2f
+                    outlineColor = ContextCompat.getColor(this@MainActivity, R.color.white)
+                }
+
+                val geometry = Geometry.fromPolyline(polyline)
+
+                mapView.mapWindow.focusRect = ScreenRect(
+                    ScreenPoint(
+                        /* x = */ mapView.mapWindow.width().toFloat() * 0.05F,
+                        /* y = */ mapView.mapWindow.height().toFloat() * 0.05F,
+                    ),
+                    ScreenPoint(
+                        /* x = */ mapView.mapWindow.width().toFloat() * 0.95F,
+                        /* y = */ mapView.mapWindow.height().toFloat() * 0.55F,
+                    )
+                )
+
+                mapView.mapWindow.map.move(
+                    mapView.mapWindow.map.cameraPosition(geometry),
+                    Animation(Animation.Type.SMOOTH, 0.5f), // Анимация перемещения
+                    null
+
+                )
+            }
+            if (route <= 0) {
+                val existingFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (existingFragment != null) {
+                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                }
+                if (polylineObject != null) {
+                    mapView.mapWindow.map.mapObjects.remove(polylineObject!!)
+                    polylineObject = null
+                }
+            }
+
+            if (route < 0) {
+                val existingFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (existingFragment != null) {
+                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                }
+                val fragment = NoRouteFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit()
+            }
+        })
+
+
+        mapView.mapWindow.map.addCameraListener(cameraListener)
+
         myButton1.setOnClickListener {
-            // Действие при нажатии на кнопку
             Toast.makeText(this@MainActivity, "Кнопка нажата!", Toast.LENGTH_SHORT).show()
             viewModel.increment()
         }
 
 
         myButton2.setOnClickListener {
-            if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
-                val fragment = NetworkErrorFragment()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit()
-            }
-            // Действие при нажатии на кнопку
-            /*CoroutineScope(Dispatchers.Main).launch {
-                val route = loadRoute()
-                if (route != null) {
-                    val points = ArrayList<Point>()
-                    for (cat in route.stops) {
-                        points.add(Point(cat.lat.toDouble(), cat.lon.toDouble()))
-                    }
-                    val polyline = Polyline(points)
-                    val polylineObject = mapView.mapWindow.map.mapObjects.addPolyline(polyline)
-                    polylineObject.apply {
-                        strokeWidth = 4f
-                        setStrokeColor(
-                            ContextCompat.getColor(
-                                this@MainActivity,
-                                R.color.blue
-                            )
-                        )
-                        outlineWidth = 1f
-                        outlineColor = ContextCompat.getColor(
-                            this@MainActivity,
-                            R.color.white
-                        )
-                    }
-                } else {
-                    Log.e("Error", "Не удалось получить маршрут")
-                }
-            }*/
+            viewModel.resetStops()
         }
 
     }
@@ -177,19 +258,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         super.onStop()
     }
 
-
-    private suspend fun loadRoute(): Route? {
-        return try {
-            val response = RetrofitClient.apiService.getRoute().awaitResponse()
-            if (response.isSuccessful) {
-                response.body()
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     override fun onError(exception: Exception) {
         val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)

@@ -1,14 +1,18 @@
 package ru.transport.threeka.api
 
+import android.content.Context
+import androidx.compose.ui.res.stringResource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.transport.threeka.R
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.2.2:80"
+    private lateinit var retrofit: Retrofit
 
-    private val retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
+    fun init(context: Context) {
+        val baseUrl = context.getString(R.string.base_url)
+        retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
