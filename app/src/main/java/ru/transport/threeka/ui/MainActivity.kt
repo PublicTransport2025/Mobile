@@ -5,10 +5,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -27,17 +29,27 @@ import ru.transport.threeka.R
 import ru.transport.threeka.api.RetrofitClient
 import ru.transport.threeka.api.schemas.Route
 import ru.transport.threeka.api.schemas.Stop
+import ru.transport.threeka.data.MainViewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ErrorCallback {
+
+    private val viewModel: MainViewModel by viewModels()
+
     private lateinit var mapView: MapView
 
     private val placemarkTapListener = MapObjectTapListener { obj, _ ->
-        Toast.makeText(
-            this@MainActivity,
-            "${obj.userData}",
-            Toast.LENGTH_SHORT
-        ).show()
+        //Toast.makeText(this@MainActivity,"${obj.userData}", Toast.LENGTH_SHORT).show()
+
+        val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (existingFragment != null) {
+            supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+        }
+
+        val fragment = StopInfoFragment.newInstance(obj.userData as Int)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, fragment)
+            .commit()
         true
     }
 
@@ -52,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        viewModel.setErrorCallback(this)
 
         MapKitFactory.initialize(this)
         mapView = findViewById(R.id.mapview)
@@ -73,32 +87,54 @@ class MainActivity : AppCompatActivity() {
 
         stopsIconsCollection.addTapListener(placemarkTapListener)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val stops = loadStops()
-            if (stops != null) {
-                for (cat in stops) {
-                    stopsIconsCollection.addPlacemark().apply {
-                        geometry = Point(cat.coord.lat.toDouble(), cat.coord.lon.toDouble())
-                        userData = cat.name
-                        setIcon(imageProvider)
-                    }
+
+        viewModel.loadStops()
+        viewModel.stops.observe(this, Observer { stops ->
+            for (i in stops.indices) {
+                stopsIconsCollection.addPlacemark().apply {
+                    geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
+                    userData = i
+                    setIcon(imageProvider)
                 }
-            } else {
-                Log.e("Error", "Не удалось получить список остановок")
             }
-        }
+        })
+
 
         val myButton1: Button = findViewById(R.id.myButton1)
         val myButton2: Button = findViewById(R.id.myButton2)
+
+        viewModel.stopFrom.observe(this, Observer { stop ->
+            if (stop == null) {
+                myButton1.text = "Откуда"
+            } else {
+                myButton1.text = stop.name
+            }
+        })
+
+        viewModel.stopTo.observe(this, Observer { stop ->
+            if (stop == null) {
+                myButton2.text = "Куда"
+            } else {
+                myButton2.text = stop.name
+            }
+        })
+
         myButton1.setOnClickListener {
             // Действие при нажатии на кнопку
             Toast.makeText(this@MainActivity, "Кнопка нажата!", Toast.LENGTH_SHORT).show()
+            viewModel.increment()
         }
 
 
         myButton2.setOnClickListener {
+            if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
+                val fragment = NetworkErrorFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit()
+            }
             // Действие при нажатии на кнопку
-            CoroutineScope(Dispatchers.Main).launch {
+            /*CoroutineScope(Dispatchers.Main).launch {
                 val route = loadRoute()
                 if (route != null) {
                     val points = ArrayList<Point>()
@@ -124,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.e("Error", "Не удалось получить маршрут")
                 }
-            }
+            }*/
         }
 
     }
@@ -141,18 +177,6 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    private suspend fun loadStops(): List<Stop>? {
-        return try {
-            val response = RetrofitClient.apiService.getStops().awaitResponse()
-            if (response.isSuccessful) {
-                response.body()
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     private suspend fun loadRoute(): Route? {
         return try {
@@ -165,5 +189,16 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             null
         }
+    }
+
+    override fun onError(exception: Exception) {
+        val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (existingFragment != null) {
+            supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+        }
+        val fragment = NetworkErrorFragment()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, fragment)
+            .commit()
     }
 }
