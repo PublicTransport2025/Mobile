@@ -162,4 +162,19 @@ class MainViewModel : ViewModel() {
         return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.load ?: 0
     }
 
+    fun getRouteTimeLabel(): String {
+        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_label
+            ?: "Nothing"
+    }
+
+    fun getRouteTimeBegin(): String {
+        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_begin
+            ?: "Nothing"
+    }
+
+    fun getRouteTimeRoad(): String {
+        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_road
+            ?: "Nothing"
+    }
+
 }

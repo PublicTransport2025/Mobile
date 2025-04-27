@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:orientation="vertical">
 
             <TextView
@@ -36,10 +36,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="3dp"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/gilroy_bold"
-                android:text="ул. Пушкинская"
-                android:textSize="24sp" />
+                android:text="Пушкинская"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/route_number"
@@ -57,26 +57,53 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/route_long_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:text="Время в пути:"
-                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/time_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:text="По графику"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/time_begin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="в 14:24"
+                    android:textColor="@color/akcent"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/route_long"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="35:00"
-                android:textColor="@color/akcent"
-                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/time_label2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:text="В пути"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/time_road"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="23 мин"
+                    android:textColor="@color/akcent"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+
 
             <TextView
                 android:id="@+id/route_load_label"
@@ -84,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:text="Загруженность:"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/route_load"
@@ -94,7 +121,7 @@
                 android:fontFamily="@font/gilroy_bold"
                 android:text="Низкая"
                 android:textColor="@color/akcent"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <ImageButton

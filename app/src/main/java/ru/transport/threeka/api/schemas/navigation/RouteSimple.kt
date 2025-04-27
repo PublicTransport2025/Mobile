@@ -7,5 +7,10 @@ data class RouteSimple(
     val number: String,
     val long: String,
     val load: Int,
+
+    val time_label: String,
+    val time_begin: String,
+    val time_road: String,
+
     val stops: List<Coord>
 )
