@@ -1,4 +1,4 @@
-package ru.transport.threeka.ui
+package ru.transport.threeka.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

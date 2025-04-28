@@ -1,8 +1,10 @@
-package ru.transport.threeka.ui
+package ru.transport.threeka.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -11,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.yandex.mapkit.Animation
 
 
@@ -29,16 +30,13 @@ import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.awaitResponse
-
 import ru.transport.threeka.R
-import ru.transport.threeka.api.RetrofitClient
-import ru.transport.threeka.api.schemas.Route
-import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.data.MainViewModel
+import ru.transport.threeka.ui.ErrorCallback
+import ru.transport.threeka.ui.fragments.NetworkErrorFragment
+import ru.transport.threeka.ui.fragments.NoRouteFragment
+import ru.transport.threeka.ui.fragments.SimpleRouteFragment
+import ru.transport.threeka.ui.fragments.StopInfoFragment
 
 
 class MainActivity : AppCompatActivity(), ErrorCallback {
@@ -67,7 +65,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     private var stopsIconsCollection: MapObjectCollection? = null
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
-        Log.w("zoom", newPosition.zoom.toString())
         if (newPosition.zoom > 13.9) {
             stopsIconsCollection?.setVisible(true)
         } else {
@@ -129,6 +126,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         val myButton1: Button = findViewById(R.id.myButton1)
         val myButton2: Button = findViewById(R.id.myButton2)
+
+
 
         viewModel.stopFrom.observe(this, Observer { stop ->
             if (stop == null) {
@@ -235,13 +234,25 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         mapView.mapWindow.map.addCameraListener(cameraListener)
 
         myButton1.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Кнопка нажата!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
             viewModel.increment()
         }
 
 
         myButton2.setOnClickListener {
+            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
             viewModel.resetStops()
+        }
+
+        val settingsButton: ImageButton = findViewById(R.id.button_setting)
+        settingsButton.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        val filterButton: ImageButton = findViewById(R.id.button_filter)
+        filterButton.setOnClickListener {
+            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -258,8 +269,27 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         super.onStop()
     }
 
+    private var isActive = false
+
+    override fun onResume() {
+        super.onResume()
+        isActive = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isActive = false
+    }
+
+    fun isActivityActive(): Boolean {
+        return isActive
+    }
+
 
     override fun onError(exception: Exception) {
+        if (!isActivityActive()){
+            return
+        }
         val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (existingFragment != null) {
             supportFragmentManager.beginTransaction().remove(existingFragment).commit()

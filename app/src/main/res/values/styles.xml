@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MainScreenButton">
-        <item name="android:background">@drawable/button_background</item>
+        <item name="android:background">@drawable/akcent_background</item>
         <item name="android:textColor">#FFFFFF</item> <!-- Цвет текста -->
         <item name="android:textSize">16sp</item> <!-- Размер текста -->
         <item name="android:fontFamily">sans-serif-medium</item> <!-- Шрифт текста -->
@@ -11,6 +11,24 @@
     <style name="DefaultText">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/gilroy</item>
+    </style>
+
+    <style name="DefaultTextLight">
+        <item name="android:textColor">#BFBFBF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/gilroy</item>
+    </style>
+
+    <style name="DefaultTextReverse">
+        <item name="android:textColor">#0A1815</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/gilroy</item>
+    </style>
+
+    <style name="DefaultTextSmall">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/gilroy</item>
     </style>
 </resources>

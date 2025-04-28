@@ -16,6 +16,7 @@
 5. В папке app создайте файл local.properties и заполните его следующим образом
 ```
 MAPKIT_API_KEY=Ключ API ЯндексКарт
+SERVER_API_KEY=Ключ указанный для сервера
 
 VK_CLIENT=Данные о VKID из кабинета разработчика
 VK_SECRET=

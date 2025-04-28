@@ -53,6 +53,15 @@ android {
     val mapkitApiKey = getMapkitApiKey()
 
 
+    fun getServerApiKey(): String {
+        val properties = Properties()
+        project.file("local.properties").inputStream().use { properties.load(it) }
+        return properties.getProperty("SERVER_API_KEY", "")
+    }
+
+    val serverApiKey = getServerApiKey()
+
+
     fun getVkClient(): String {
         val properties = Properties()
         project.file("local.properties").inputStream().use { properties.load(it) }
@@ -69,6 +78,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "MAPKIT_API_KEY", "\"$mapkitApiKey\"")
+        buildConfigField("String", "SERVER_API_KEY", "\"$serverApiKey\"")
         applicationId = "ru.transport.threeka"
         minSdk = 30
         targetSdk = 35
@@ -138,6 +148,7 @@ dependencies {
     implementation("com.vk.id:vkid:2.3.1")
     implementation("com.vk.id:onetap-compose:2.3.1")
     implementation("com.vk.id:onetap-xml:2.3.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

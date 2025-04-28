@@ -6,65 +6,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.transport.threeka.ui.MainActivity">
+    tools:context="ru.transport.threeka.ui.activities.MainActivity">
 
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <LinearLayout
 
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:background="@drawable/akcent_background"
                 android:orientation="vertical"
-                app:layout_constraintWidth_percent="0.9"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/button_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="6dp"
+                    android:src="@drawable/filter" />
+
+                <ImageButton
+                    android:id="@+id/button_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="6dp"
+                    android:src="@drawable/settings" />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.95">
+                app:layout_constraintVertical_bias="0.95"
+                app:layout_constraintWidth_percent="0.9">
 
                 <FrameLayout
                     android:id="@+id/fragment_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginVertical="10dp"/>
+                    android:layout_marginVertical="10dp" />
 
                 <Button
                     android:id="@+id/myButton1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:backgroundTint="@color/akcent"
-                    android:textAppearance="@style/DefaultText"
+                    android:layout_margin="1dp"
                     android:text="Откуда"
-                    android:layout_margin="1dp"/>
+                    android:textAppearance="@style/DefaultText"
+                    app:backgroundTint="@color/akcent" />
 
                 <Button
-                    android:layout_margin="1dp"
                     android:id="@+id/myButton2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:backgroundTint="@color/akcent"
+                    android:layout_margin="1dp"
+                    android:text="Куда"
                     android:textAppearance="@style/DefaultText"
-                    android:text="Куда" />
+                    app:backgroundTint="@color/akcent" />
 
             </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.yandex.mapkit.mapview.MapView>
-
-
-
-
 
 
 </LinearLayout>
