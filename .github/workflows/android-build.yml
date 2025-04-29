@@ -19,9 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Run a one-line script 
-        run: echo Hello, world!
-
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_HOME" > app/local.properties
@@ -33,29 +30,14 @@ jobs:
           echo "KEY_PASS=${{ secrets.KEY_PASS }}" >> app/local.properties
           echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> app/local.properties
 
-      - name: Run a one-line script 
-        run: echo Hello, world2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Run a one-line script 
-        run: echo Hello, world3
-
       - name: Decrypt keystore
         run: echo "${{ secrets.MEGAPOLIS_KEY_BASE64 }}" | base64 --decode > app/megapolis.jks
 
-      - name: Run a one-line script 
-        run: echo Hello, world4
-
       - name: Build APK
         run: ./gradlew assembleRelease
-
-      - name: Run a one-line script 
-        run: echo Hello, world5
         
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mobile3ka.apk
           path: build/outputs/apk/release/app-release.apk
