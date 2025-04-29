@@ -53,6 +53,12 @@ jobs:
 
       - name: Run a one-line script 
         run: echo Hello, world5
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: mobile3ka.apk
+          path: build/outputs/apk/release/app-release.apk
 
 
 
