@@ -32,7 +32,7 @@ jobs:
 
       - name: Decrypt keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > your-key.jks
+          echo "${{ secrets.MEGAPOLIS_KEY_BASE64 }}" | base64 --decode > app/megapolis.jks
 
       - name: Build APK
         run: ./gradlew assembleRelease
