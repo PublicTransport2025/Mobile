@@ -30,6 +30,9 @@ jobs:
           echo "KEY_PASS=${{ secrets.KEY_PASS }}" >> app/local.properties
           echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> app/local.properties
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Decrypt keystore
         run: |
           echo "${{ secrets.MEGAPOLIS_KEY_BASE64 }}" | base64 --decode > app/megapolis.jks
