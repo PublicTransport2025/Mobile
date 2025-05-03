@@ -14,4 +14,10 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun mapKeyIsExists() {
+        val mapKey: String = BuildConfig.MAPKIT_API_KEY
+        assertTrue(mapKey.length == 36)
+    }
 }
