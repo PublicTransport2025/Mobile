@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Switch
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -100,6 +101,16 @@ class SettingsActivity : AppCompatActivity() {
         val button6: Button = findViewById(R.id.button_north)
         button6.setOnClickListener {
             northSwitch.isChecked = !northSwitch.isChecked
+        }
+
+        val button7: Button = findViewById(R.id.button_login)
+        button7.setOnClickListener {
+            Toast.makeText(this@SettingsActivity, "Coming soon", Toast.LENGTH_SHORT).show()
+        }
+
+        val button8: Button = findViewById(R.id.button_registration)
+        button8.setOnClickListener {
+            Toast.makeText(this@SettingsActivity, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
 
