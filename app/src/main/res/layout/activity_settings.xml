@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context="ru.transport.threeka.ui.activities.MainActivity">
 
@@ -19,7 +19,8 @@
         android:layout_marginTop="50dp"
         android:textAppearance="@style/DefaultTextSmall"
         app:backgroundTint="@color/akcent"
-        app:icon="@drawable/left_long" />
+        app:icon="@drawable/left_long"
+        app:iconTint="@color/button_text"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,6 +29,79 @@
         android:layout_margin="20dp"
         android:text="Параметры"
         android:textAppearance="@style/DefaultTextReverse" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="1dp"
+            android:text="Темная тема"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:icon="@drawable/lune"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/button_text"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/themeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_theme"
+            app:layout_constraintEnd_toEndOf="@+id/button_theme"
+            app:layout_constraintTop_toTopOf="@+id/button_theme"
+            app:thumbTint="@color/akcent"
+            app:trackDecorationTint="@color/white"
+            app:trackTint="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_north"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="1dp"
+            android:text="Север всегда сверху"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:icon="@drawable/north"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/button_text"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/northSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_north"
+            app:layout_constraintEnd_toEndOf="@+id/button_north"
+            app:layout_constraintTop_toTopOf="@+id/button_north"
+            app:thumbTint="@color/akcent"
+            android:textColor="@color/button_text"
+            app:trackDecorationTint="@color/white"
+            app:trackTint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <Button
         android:id="@+id/button_confidentional"
@@ -38,7 +112,9 @@
         android:text="Политика конфиденциальности"
         android:textAppearance="@style/DefaultTextSmall"
         app:backgroundTint="@color/akcent"
-        app:icon="@drawable/confidentional" />
+        android:textColor="@color/button_text"
+        app:icon="@drawable/confidentional"
+        app:iconTint="@color/button_text"/>
 
     <Button
         android:id="@+id/button_report"
@@ -49,7 +125,9 @@
         android:text="Пользовательское соглашение"
         android:textAppearance="@style/DefaultTextSmall"
         app:backgroundTint="@color/akcent"
-        app:icon="@drawable/user_report" />
+        android:textColor="@color/button_text"
+        app:icon="@drawable/user_report"
+        app:iconTint="@color/button_text"/>
 
     <Button
         android:id="@+id/button_map"
@@ -60,7 +138,9 @@
         android:text="Информация о Яндекс Картах"
         android:textAppearance="@style/DefaultTextSmall"
         app:backgroundTint="@color/akcent"
-        app:icon="@drawable/map" />
+        android:textColor="@color/button_text"
+        app:icon="@drawable/map"
+        app:iconTint="@color/button_text"/>
 
     <View
         android:layout_width="match_parent"

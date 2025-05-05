@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Не удалось загрузить данные о транспорте"
         android:textSize="18sp"
+        android:textAppearance="@style/DefaultTextReverse"
         android:layout_margin="10dp"/>
 
     <TextView
@@ -22,6 +23,8 @@
         android:layout_height="wrap_content"
         android:text="Проверьте подключение к интернету и попробуйте снова"
         android:textSize="18sp"
+        android:textAppearance="@style/DefaultTextReverse"
+
         android:layout_margin="10dp"/>
     <Button
         android:id="@+id/button_okey"
@@ -29,6 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Попробовать снова"
         app:backgroundTint="@color/akcent"
+        android:textColor="@color/button_text"
         android:textAppearance="@style/DefaultText"/>
 
 

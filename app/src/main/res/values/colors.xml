@@ -10,4 +10,7 @@
     <color name="load0">#818181</color>
     <color name="white">#FFFFFFFF</color>
     <color name="akcent">#377E70</color>
+
+    <color name="background">#FFFFFFFF</color>
+    <color name="button_text">#FDFDFD</color>
 </resources>

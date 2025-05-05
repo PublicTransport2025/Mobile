@@ -1,6 +1,7 @@
 package ru.transport.threeka.ui.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
     private val viewModel: MainViewModel by viewModels()
 
+    private lateinit var sharedPref: SharedPreferences
+
     private lateinit var mapView: MapView
     private var polylineObject: MapObject? = null
 
@@ -73,6 +77,16 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDarkTheme = sharedPref.getBoolean("dark_theme", false)
+        val isNorth = sharedPref.getBoolean("north_upper", false)
+
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -88,6 +102,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         MapKitFactory.initialize(this)
         mapView = findViewById(R.id.mapview)
+        mapView.mapWindow.map.isNightModeEnabled = isDarkTheme
+        mapView.mapWindow.map.isRotateGesturesEnabled = !isNorth
         mapView.mapWindow.map.move(
             CameraPosition(
                 Point(51.68, 39.2),
@@ -274,6 +290,23 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     override fun onResume() {
         super.onResume()
         isActive = true
+
+        sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
+        val isNorth = sharedPref.getBoolean("north_upper", false)
+        if (mapView.mapWindow.map.isRotateGesturesEnabled  && isNorth){
+            mapView.mapWindow.map.isRotateGesturesEnabled = false
+            mapView.mapWindow.map.move(
+                CameraPosition(
+                    Point(51.68, 39.2),
+                    /* zoom = */ 12.0f,
+                    /* azimuth = */ 0.0f,
+                    /* tilt = */ 0.0f
+                )
+            )
+        }
+        if (!mapView.mapWindow.map.isRotateGesturesEnabled  && !isNorth){
+            mapView.mapWindow.map.isRotateGesturesEnabled = true
+        }
     }
 
     override fun onPause() {
