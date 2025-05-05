@@ -21,7 +21,7 @@
     </style>
 
     <style name="DefaultTextReverse">
-        <item name="android:textColor">#0A1815</item>
+        <item name="android:textColor">#FDFDFD</item>
         <item name="android:textSize">22sp</item>
         <item name="android:fontFamily">@font/gilroy</item>
     </style>

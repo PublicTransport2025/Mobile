@@ -77,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:text="Откуда"
+                    android:textColor="@color/button_text"
                     android:textAppearance="@style/DefaultText"
                     app:backgroundTint="@color/akcent" />
 
@@ -86,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:text="Куда"
+                    android:textColor="@color/button_text"
                     android:textAppearance="@style/DefaultText"
                     app:backgroundTint="@color/akcent" />
 

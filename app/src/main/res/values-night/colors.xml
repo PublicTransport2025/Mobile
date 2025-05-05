@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="blue">#000081</color>
+    <color name="load1">#00564E</color>
+    <color name="load2">#5BAB01</color>
+    <color name="load3">#B4A428</color>
+    <color name="load4">#AF6E00</color>
+    <color name="load5">#87002B</color>
+    <color name="load0">#818181</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="akcent">#377E70</color>
+
+    <color name="background">#FF0A1815</color>
+</resources>

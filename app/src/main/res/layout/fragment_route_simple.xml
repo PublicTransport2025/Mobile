@@ -39,6 +39,7 @@
                 android:layout_margin="5dp"
                 android:fontFamily="@font/gilroy_bold"
                 android:text="Пушкинская"
+                android:textAppearance="@style/DefaultTextReverse"
                 android:textSize="20sp" />
 
             <TextView
@@ -69,6 +70,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:text="По графику"
+                    android:textAppearance="@style/DefaultTextReverse"
+
                     android:textSize="18sp" />
                 <TextView
                     android:id="@+id/time_begin"
@@ -90,6 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:text="В пути"
+                    android:textAppearance="@style/DefaultTextReverse"
+
                     android:textSize="18sp" />
                 <TextView
                     android:id="@+id/time_road"
@@ -111,6 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:text="Загруженность:"
+                android:textAppearance="@style/DefaultTextReverse"
+
                 android:textSize="18sp" />
 
             <TextView
@@ -146,6 +153,7 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:text="Поехали"
+            android:textColor="@color/button_text"
             android:textAppearance="@style/DefaultText"
             app:backgroundTint="@color/akcent" />
 
