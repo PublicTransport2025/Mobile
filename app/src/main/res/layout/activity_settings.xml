@@ -31,6 +31,40 @@
         android:textAppearance="@style/DefaultTextReverse" />
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="1dp">
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1"
+            android:text="Войти"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultText"
+            app:backgroundTint="@color/akcent" />
+
+        <Button
+            android:id="@+id/button_registration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_weight="1"
+            android:text="Регистрация"
+            android:textAppearance="@style/DefaultText"
+            android:textColor="@color/akcent"
+            app:backgroundTint="@color/white"
+            app:strokeColor="@color/akcent"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
