@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fragment_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/button_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/left" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/route_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="Пушкинская"
+                        android:textAppearance="@style/DefaultTextReverse"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/route_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/gilroy"
+                        android:text="45"
+                        android:textColor="@color/akcent"
+                        android:textSize="45sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/time_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:text="По графику"
+                            android:textAppearance="@style/DefaultTextReverse"
+
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/time_begin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="в 14:24"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/time_label2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:text="В пути"
+                            android:textAppearance="@style/DefaultTextReverse"
+
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/time_road"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="23 мин"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+
+
+                    <TextView
+                        android:id="@+id/route_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="Низкая"
+                        android:textColor="@color/akcent"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/stop_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="0dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="Пушкинская"
+                android:textAppearance="@style/DefaultTextReverse"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/stop_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="0dp"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="Пушкинская"
+                android:textAppearance="@style/DefaultTextReverse"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/route_title_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="Пушкинская"
+                        android:textAppearance="@style/DefaultTextReverse"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/route_number_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/gilroy"
+                        android:text="45"
+                        android:textColor="@color/akcent"
+                        android:textSize="45sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/time_label_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:text="По графику"
+                            android:textAppearance="@style/DefaultTextReverse"
+
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/time_begin_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="в 14:24"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/time_label2_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:text="В пути"
+                            android:textAppearance="@style/DefaultTextReverse"
+
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/time_road_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="23 мин"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/route_load_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:text="Низкая"
+                        android:textColor="@color/akcent"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/button_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/right" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:text="Поехали"
+            android:textAppearance="@style/DefaultText"
+            android:textColor="@color/button_text"
+            app:backgroundTint="@color/akcent" />
+
+        <Button
+            android:id="@+id/button_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:text="Отмена"
+            android:textAppearance="@style/DefaultText"
+            android:textColor="@color/akcent"
+            app:backgroundTint="@color/white"
+            app:strokeColor="@color/akcent"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

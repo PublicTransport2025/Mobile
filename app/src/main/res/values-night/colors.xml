@@ -12,4 +12,6 @@
     <color name="akcent">#377E70</color>
 
     <color name="background">#FF0A1815</color>
+    <color name="textcolor">#FDFDFD</color>
+    <color name="link">#FDFDFD</color>
 </resources>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context="ru.transport.threeka.ui.activities.MainActivity">
+
+    <Button
+        android:id="@+id/button_back"
+        style="?attr/materialIconButtonFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="50dp"
+        android:textAppearance="@style/DefaultTextSmall"
+        app:backgroundTint="@color/akcent"
+        app:icon="@drawable/left_long"
+        app:iconTint="@color/button_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Фильтр маршрутов"
+        android:textAppearance="@style/DefaultTextReverse" />
+
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_change"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="1dp"
+            android:text="Без пересадок"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/button_text"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_change"
+            app:layout_constraintEnd_toEndOf="@+id/button_change"
+            app:layout_constraintTop_toTopOf="@+id/button_change"
+            app:thumbTint="@color/akcent"
+            app:trackDecorationTint="@color/white"
+            app:trackTint="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_care"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="1dp"
+            android:text="Низкопольный ПС"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/button_text"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_care"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_care"
+            app:layout_constraintEnd_toEndOf="@+id/button_care"
+            app:layout_constraintTop_toTopOf="@+id/button_care"
+            app:thumbTint="@color/akcent"
+            android:textColor="@color/button_text"
+            app:trackDecorationTint="@color/white"
+            app:trackTint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <Button
+        android:id="@+id/button_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="1dp"
+        android:text="Приоритет: Загруженность"
+        android:textAppearance="@style/DefaultTextSmall"
+        app:backgroundTint="@color/akcent"
+        android:textColor="@color/button_text"
+        app:iconTint="@color/button_text"/>
+
+    <Button
+        android:id="@+id/button_apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="1dp"
+        android:text="Применить"
+        android:textAppearance="@style/DefaultTextSmall"
+        app:backgroundTint="@color/akcent"
+        android:textColor="@color/button_text"
+        app:iconTint="@color/button_text"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="© Транспорт 2025"
+        android:textAppearance="@style/DefaultTextLight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:text="0.1.0"
+        android:textAppearance="@style/DefaultTextLight" />
+
+
+</LinearLayout>

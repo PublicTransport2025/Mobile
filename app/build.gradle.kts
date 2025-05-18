@@ -61,6 +61,13 @@ android {
 
     val serverApiKey = getServerApiKey()
 
+    fun getAppMetrikaApiKey(): String {
+        val properties = Properties()
+        project.file("local.properties").inputStream().use { properties.load(it) }
+        return properties.getProperty("APPMETRIKA_API_KEY", "")
+    }
+
+    val appMetrikaApiKey = getAppMetrikaApiKey()
 
     fun getVkClient(): String {
         val properties = Properties()
@@ -79,6 +86,7 @@ android {
     defaultConfig {
         buildConfigField("String", "MAPKIT_API_KEY", "\"$mapkitApiKey\"")
         buildConfigField("String", "SERVER_API_KEY", "\"$serverApiKey\"")
+        buildConfigField("String", "APPMETRIKA_API_KEY", "\"$appMetrikaApiKey\"")
         applicationId = "ru.transport.threeka"
         minSdk = 30
         targetSdk = 35
@@ -140,7 +148,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     //noinspection UseTomlInstead
-    implementation("com.yandex.android:maps.mobile:4.5.0-lite")
+    implementation("com.yandex.android:maps.mobile:4.5.0-full")
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -149,6 +157,8 @@ dependencies {
     implementation("com.vk.id:onetap-compose:2.3.1")
     implementation("com.vk.id:onetap-xml:2.3.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    implementation("io.appmetrica.analytics:analytics:7.9.0")
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
