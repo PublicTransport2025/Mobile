@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fragment_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_no_bus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Автобуса нет?"
+            android:textAppearance="@style/DefaultText"
+            android:textColor="@color/akcent"
+            app:backgroundTint="@color/white"
+            app:strokeColor="@color/akcent"
+            app:strokeWidth="2dp" />
+
+        <ImageButton
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="6dp"
+            android:src="@drawable/close"
+            app:tint="@color/textcolor"/>
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

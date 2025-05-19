@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -65,6 +66,14 @@ class StopInfoFragment : Fragment() {
             parentFragmentManager.beginTransaction()
                 .remove(this)
                 .commit()
+        }
+
+        val buttonClose = view.findViewById<ImageButton>(R.id.button_close)
+        buttonClose.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .remove(this)
+                .commit()
+            viewModel.awakeRoute()
         }
 
 

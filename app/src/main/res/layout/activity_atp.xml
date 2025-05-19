@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context="ru.transport.threeka.ui.activities.MainActivity">
+
+    <TextView
+        android:id="@+id/phoneTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="phone"
+        android:linksClickable="true"
+        android:text="@string/eogpp_phone"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textColorLink="@color/link"
+        android:textSize="16sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAtp2" />
+
+    <Button
+        android:id="@+id/button_back"
+        style="?attr/materialIconButtonFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:textAppearance="@style/DefaultTextSmall"
+        app:backgroundTint="@color/akcent"
+        app:icon="@drawable/left_long"
+        app:iconTint="@color/button_text"
+        app:layout_constraintBottom_toBottomOf="@+id/textHeader"
+        app:layout_constraintEnd_toStartOf="@+id/textHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textHeader" />
+
+    <TextView
+        android:id="@+id/textHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Ваш автобус\nне пришел вовремя?"
+        android:textAppearance="@style/DefaultTextReverse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Пожалуйста, учитывайте, что сервис 3КА предоставляет данные
+о движении, ориентруясь на официальные (плановые) данные. Но существует целый ряд причин
+включая погодные условия, технические осмотры, режим работы водителей из-за которых
+транспорта не может быть на линии.\nВы можете уточнить данные в АТП:"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHeader" />
+
+    <TextView
+        android:id="@+id/phoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="phone"
+        android:linksClickable="true"
+        android:text="+7 (000) 111-11-11"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textColorLink="@color/link"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAtp" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="email"
+        android:linksClickable="true"
+        android:text="example@gmail.com"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textColorLink="@color/link"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
+
+    <TextView
+        android:id="@+id/textAtp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:text="ГУП Горэлектротранс"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textAtp2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Жалобы в ЕОГПП"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

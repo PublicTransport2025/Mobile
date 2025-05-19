@@ -1,10 +1,13 @@
 package ru.transport.threeka.data
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.appmetrica.analytics.AppMetrica
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
 import ru.transport.threeka.api.RetrofitClient.apiService
@@ -13,13 +16,35 @@ import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.api.schemas.navigation.RouteReport
 import ru.transport.threeka.ui.ErrorCallback
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _count = MutableLiveData(0)
     val count: LiveData<Int> get() = _count
+
+    private val _care = MutableLiveData(false)
+    val care: LiveData<Boolean> get() = _care
+
+    fun setCare(bool: Boolean) {
+        _care.value = bool;
+    }
+
+    private val _change = MutableLiveData(false)
+    val change: LiveData<Boolean> get() = _change
+
+    fun setChange(bool: Boolean) {
+        _change.value = bool;
+    }
+
+    private val _priority = MutableLiveData(0)
+    val priority: LiveData<Int> get() = _priority
+
+    fun setPriority(bool: Int) {
+        _priority.value = bool;
+    }
 
     private val _stops = MutableLiveData<List<Stop>>()
     val stops: LiveData<List<Stop>> get() = _stops
     private var isStopsLoaded = false
+
 
     private val _stopFrom = MutableLiveData<Stop?>()
     val stopFrom: LiveData<Stop?> get() = _stopFrom
@@ -47,8 +72,16 @@ class MainViewModel : ViewModel() {
         _acvtiveRoute.value = (_acvtiveRoute.value ?: 0) + 1
     }
 
+    fun awakeRoute() {
+        _acvtiveRoute.value = _acvtiveRoute.value
+    }
+
     fun hasRight(): Boolean {
         return (_acvtiveRoute.value ?: 0) < (_routeReport.value?.count ?: 0)
+    }
+
+    fun isSimple(): Boolean {
+        return (_acvtiveRoute.value ?: 0) - 1 < (_routeReport.value?.count_simple ?: 0)
     }
 
     fun hasLeft(): Boolean {
@@ -75,19 +108,31 @@ class MainViewModel : ViewModel() {
     }
 
     fun setStopFrom(index: Int) {
+        if (index < 0) {
+            return
+        }
         _stopFrom.value = _stops.value?.get(index)
         if (_stopFrom.value == _stopTo.value) {
             _stopTo.value = null
         }
         checkRoute()
+
+        val eventParameters = mapOf("name" to (_stopFrom.value?.name ?: "-"))
+        AppMetrica.reportEvent("Stop selected", eventParameters)
     }
 
     fun setStopTo(index: Int) {
+        if (index < 0) {
+            return
+        }
         _stopTo.value = _stops.value?.get(index)
         if (_stopFrom.value == _stopTo.value) {
             _stopFrom.value = null
         }
         checkRoute()
+
+        val eventParameters = mapOf("name" to (_stopTo.value?.name ?: "-"))
+        AppMetrica.reportEvent("Stop selected", eventParameters)
     }
 
     fun resetStops() {
@@ -110,7 +155,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
     private var errorCallback: ErrorCallback? = null
 
     fun setErrorCallback(callback: ErrorCallback) {
@@ -128,53 +172,241 @@ class MainViewModel : ViewModel() {
             try {
                 val fromId = _stopFrom.value!!.id
                 val toId = _stopTo.value!!.id
-                val response = apiService.createRoute(fromId, toId).awaitResponse()
+                val care_ = _care.value ?: false
+                val change_ = _change.value ?: false
+                val priority_ = _priority.value ?: 0
+                val response = apiService.createRoute(fromId, toId, care_, change_, priority_)
+                    .awaitResponse()
                 _routeReport.value = response.body()
                 val result = _routeReport.value?.result ?: 0
                 if (result == 200) {
                     _acvtiveRoute.value = 1
+                    val eventParameters =
+                        mapOf("from" to _stopFrom.value!!.name, "to" to _stopTo.value!!.name)
+                    AppMetrica.reportEvent("Route_created", eventParameters)
                 } else {
                     _acvtiveRoute.value = -1
                 }
             } catch (e: Exception) {
-                Log.e("APIError", "Не удалось построить маршрут")
-                errorCallback?.onError(e)
+                Log.e("APIError", "Не удалось построить маршрут" + e.message)
+                _acvtiveRoute.value = -1
             }
         }
     }
 
     fun getRouteTitle(): String {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.label
-            ?: "Nothing"
+        if ((_acvtiveRoute.value ?: 0) - 1 < (_routeReport.value?.count_simple ?: 0)) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.label
+                ?: "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.label1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteTitleDouble(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.label2
+                ?: "Nothing"
+        }
     }
 
     fun getRouteNumber(): String {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.number
-            ?: "Nothing"
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.number
+                ?: "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.number1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteNumberDouble(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.number2
+                ?: "Nothing"
+        }
     }
 
     fun getRouteCoords(): List<Coord> {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.stops
-            ?: listOf()
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.stops
+                ?: listOf()
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.stops1
+                ?: listOf()
+        }
+    }
+
+    fun getRouteCoordsDouble(): List<Coord> {
+        if (isSimple()) {
+            return listOf()
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.stops2
+                ?: listOf()
+        }
+    }
+
+    fun getStops(): ArrayList<String> {
+        val list = ArrayList<String>()
+        for (stop in _stops.value ?: listOf()) {
+            if (stop.about != null && stop.about != "None") {
+                list.add(stop.name + " (" + stop.about + ")")
+            } else {
+                list.add(stop.name)
+            }
+
+        }
+        return list
+    }
+
+    fun getStopsLat(): DoubleArray {
+        val array = DoubleArray(_stops.value?.size ?: 0)
+        for (i in (_stops.value ?: listOf()).indices) {
+            array[i] = (_stops.value ?: listOf())[i].coord.lat
+        }
+        return array
+    }
+
+    fun getStopsLon(): DoubleArray {
+        val array = DoubleArray(_stops.value?.size ?: 0)
+        for (i in (_stops.value ?: listOf()).indices) {
+            array[i] = (_stops.value ?: listOf())[i].coord.lon
+        }
+        return array
     }
 
     fun getRouteLoad(): Int {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.load ?: 0
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.load ?: 0
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.load1
+                ?: 0
+        }
+    }
+
+    fun getRouteLoadDouble(): Int {
+        if (isSimple()) {
+            return 0
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.load2
+                ?: 0
+        }
     }
 
     fun getRouteTimeLabel(): String {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_label
-            ?: "Nothing"
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1
+            )?.time_label
+                ?: "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_label1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteTimeLabelDouble(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_label2
+                ?: "Nothing"
+        }
     }
 
     fun getRouteTimeBegin(): String {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_begin
-            ?: "Nothing"
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1
+            )?.time_begin
+                ?: "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_begin1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteTimeBeginDouble(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_begin2
+                ?: "Nothing"
+        }
     }
 
     fun getRouteTimeRoad(): String {
-        return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_road
-            ?: "Nothing"
+        if (isSimple()) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.time_road
+                ?: "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_road1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteTimeRoadDouble(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.time_road2
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteStop1(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.stop1
+                ?: "Nothing"
+        }
+    }
+
+    fun getRouteStop2(): String {
+        if (isSimple()) {
+            return "Nothing"
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.stop2
+                ?: "Nothing"
+        }
     }
 
 }

@@ -26,6 +26,12 @@
         <item name="android:fontFamily">@font/gilroy</item>
     </style>
 
+    <style name="DefaultTextBoldReverse">
+        <item name="android:textColor">#0A1815</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/gilroy_bold</item>
+    </style>
+
     <style name="DefaultTextSmall">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16sp</item>

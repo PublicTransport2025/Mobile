@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="MainScreenButton">
         <item name="android:background">@drawable/akcent_background</item>
         <item name="android:textColor">#FFFFFF</item> <!-- Цвет текста -->
@@ -26,13 +27,19 @@
         <item name="android:fontFamily">@font/gilroy</item>
     </style>
 
+    <style name="DefaultTextBoldReverse">
+        <item name="android:textColor">#FDFDFD</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/gilroy_bold</item>
+    </style>
+
     <style name="DefaultTextSmall">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/gilroy</item>
     </style>
 
-    <style name="DefaultSwitch" >
+    <style name="DefaultSwitch">
         <item name="colorPrimary">@color/white</item>
         <item name="colorSurfaceVariant">@color/akcent</item>
     </style>

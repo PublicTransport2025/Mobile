@@ -13,4 +13,6 @@
 
     <color name="background">#FFFFFFFF</color>
     <color name="button_text">#FDFDFD</color>
+    <color name="textcolor">#0A1815</color>
+    <color name="link">#377E70</color>
 </resources>

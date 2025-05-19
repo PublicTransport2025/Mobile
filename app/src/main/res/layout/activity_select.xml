@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context="ru.transport.threeka.ui.activities.SelectActivity"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/akcent"
+        app:endIconDrawable="@drawable/close"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:startIconDrawable="@drawable/left_long"
+        app:startIconTint="@color/button_text"
+        app:endIconTint="@color/button_text"
+        android:textColor="@color/button_text"
+        android:background="@drawable/akcent_background"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/button_text"
+            android:textColorHint="@color/button_text"
+            android:textAppearance="@style/DefaultText"
+            app:cursorColor="@color/button_text"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:hint="Откуда" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>

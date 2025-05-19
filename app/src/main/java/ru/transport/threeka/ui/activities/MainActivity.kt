@@ -1,13 +1,14 @@
 package ru.transport.threeka.ui.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.yandex.mapkit.Animation
 
 
@@ -35,6 +37,7 @@ import com.yandex.runtime.image.ImageProvider
 import ru.transport.threeka.R
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
+import ru.transport.threeka.ui.fragments.DoubleRouteFragment
 import ru.transport.threeka.ui.fragments.NetworkErrorFragment
 import ru.transport.threeka.ui.fragments.NoRouteFragment
 import ru.transport.threeka.ui.fragments.SimpleRouteFragment
@@ -43,12 +46,15 @@ import ru.transport.threeka.ui.fragments.StopInfoFragment
 
 class MainActivity : AppCompatActivity(), ErrorCallback {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+    }
 
     private lateinit var sharedPref: SharedPreferences
 
     private lateinit var mapView: MapView
     private var polylineObject: MapObject? = null
+    private var polylineObject2: MapObject? = null
 
 
     private val placemarkTapListener = MapObjectTapListener { obj, _ ->
@@ -76,6 +82,56 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         }
     }
 
+    private val selectStopFrom =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultData = result.data?.getIntExtra("stop_id", -1)
+                if (resultData != null) {
+                    if (resultData > 0) {
+                        viewModel.setStopFrom(resultData)
+                        mapView.mapWindow.map.move(
+                            CameraPosition(
+                                Point(
+                                    viewModel.stopFrom.value?.coord?.lat!!,
+                                    viewModel.stopFrom.value?.coord?.lon!!
+                                ),
+                                /* zoom = */ 16.0f,
+                                /* azimuth = */ 0.0f,
+                                /* tilt = */ 0.0f
+                            ),
+                            Animation(Animation.Type.SMOOTH, 0.5f),
+                            null
+                        )
+                    }
+                }
+            }
+        }
+
+    private val selectStopTo =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultData = result.data?.getIntExtra("stop_id", -1)
+                if (resultData != null) {
+                    if (resultData > 0) {
+                        viewModel.setStopTo(resultData)
+                        mapView.mapWindow.map.move(
+                            CameraPosition(
+                                Point(
+                                    viewModel.stopTo.value?.coord?.lat!!,
+                                    viewModel.stopTo.value?.coord?.lon!!
+                                ),
+                                /* zoom = */ 16.0f,
+                                /* azimuth = */ 0.0f,
+                                /* tilt = */ 0.0f
+                            ),
+                            Animation(Animation.Type.SMOOTH, 0.5f),
+                            null
+                        )
+                    }
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
         val isDarkTheme = sharedPref.getBoolean("dark_theme", false)
@@ -99,6 +155,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         }
 
         viewModel.setErrorCallback(this)
+        viewModel.setCare(sharedPref.getBoolean("care", false))
+        viewModel.setChange(sharedPref.getBoolean("change", false))
+        viewModel.setPriority(sharedPref.getInt("priority", 0))
 
         MapKitFactory.initialize(this)
         mapView = findViewById(R.id.mapview)
@@ -168,10 +227,17 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 if (existingFragment != null) {
                     supportFragmentManager.beginTransaction().remove(existingFragment).commit()
                 }
-                val fragment = SimpleRouteFragment()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit()
+                if (viewModel.isSimple()) {
+                    val fragment = SimpleRouteFragment()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit()
+                } else {
+                    val fragment = DoubleRouteFragment()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit()
+                }
 
                 val coords = viewModel.getRouteCoords()
                 val points = ArrayList<Point>()
@@ -182,6 +248,10 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 if (polylineObject != null) {
                     mapView.mapWindow.map.mapObjects.remove(polylineObject!!)
                     polylineObject = null
+                }
+                if (polylineObject2 != null) {
+                    mapView.mapWindow.map.mapObjects.remove(polylineObject2!!)
+                    polylineObject2 = null
                 }
 
                 val load = viewModel.getRouteLoad()
@@ -201,7 +271,46 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     outlineColor = ContextCompat.getColor(this@MainActivity, R.color.white)
                 }
 
-                val geometry = Geometry.fromPolyline(polyline)
+                var geometry = Geometry.fromPolyline(polyline)
+
+                if (!viewModel.isSimple()) {
+                    val coords2 = viewModel.getRouteCoordsDouble()
+                    val points2 = ArrayList<Point>()
+                    for (coord in coords2) {
+                        points2.add(Point(coord.lat, coord.lon))
+                    }
+                    val polyline2 = Polyline(points2)
+
+                    val load2 = viewModel.getRouteLoadDouble()
+                    val color2 = when (load2) {
+                        1 -> ContextCompat.getColor(this@MainActivity, R.color.load1)
+                        2 -> ContextCompat.getColor(this@MainActivity, R.color.load2)
+                        3 -> ContextCompat.getColor(this@MainActivity, R.color.load3)
+                        4 -> ContextCompat.getColor(this@MainActivity, R.color.load4)
+                        5 -> ContextCompat.getColor(this@MainActivity, R.color.load5)
+                        else -> ContextCompat.getColor(this@MainActivity, R.color.load0)
+                    }
+
+                    polylineObject2 =
+                        mapView.mapWindow.map.mapObjects.addPolyline(polyline2).apply {
+                            strokeWidth = 6f
+                            setStrokeColor(color2)
+                            outlineWidth = 2f
+                            outlineColor = ContextCompat.getColor(this@MainActivity, R.color.white)
+                        }
+                    val pointsFull = ArrayList<Point>()
+                    for (coord in coords) {
+                        pointsFull.add(Point(coord.lat, coord.lon))
+                    }
+                    for (coord in coords2) {
+                        pointsFull.add(Point(coord.lat, coord.lon))
+                    }
+                    val polylineFull = Polyline(pointsFull)
+                    geometry = Geometry.fromPolyline(polylineFull)
+
+                }
+
+
 
                 mapView.mapWindow.focusRect = ScreenRect(
                     ScreenPoint(
@@ -210,7 +319,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     ),
                     ScreenPoint(
                         /* x = */ mapView.mapWindow.width().toFloat() * 0.95F,
-                        /* y = */ mapView.mapWindow.height().toFloat() * 0.55F,
+                        /* y = */ mapView.mapWindow.height().toFloat() * 0.5F,
                     )
                 )
 
@@ -218,8 +327,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     mapView.mapWindow.map.cameraPosition(geometry),
                     Animation(Animation.Type.SMOOTH, 0.5f), // Анимация перемещения
                     null
-
                 )
+
+
             }
             if (route <= 0) {
                 val existingFragment =
@@ -230,6 +340,10 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 if (polylineObject != null) {
                     mapView.mapWindow.map.mapObjects.remove(polylineObject!!)
                     polylineObject = null
+                }
+                if (polylineObject2 != null) {
+                    mapView.mapWindow.map.mapObjects.remove(polylineObject2!!)
+                    polylineObject2 = null
                 }
             }
 
@@ -249,15 +363,24 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         mapView.mapWindow.map.addCameraListener(cameraListener)
 
+
         myButton1.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
-            viewModel.increment()
+            val intent = Intent(this, SelectActivity::class.java)
+            intent.putExtra("label", "Откуда")
+            intent.putExtra("stops", viewModel.getStops())
+            intent.putExtra("stops_lat", viewModel.getStopsLat())
+            intent.putExtra("stops_lon", viewModel.getStopsLon())
+            selectStopFrom.launch(intent)
         }
 
 
         myButton2.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
-            viewModel.resetStops()
+            val intent = Intent(this, SelectActivity::class.java)
+            intent.putExtra("label", "Куда")
+            intent.putExtra("stops", viewModel.getStops())
+            intent.putExtra("stops_lat", viewModel.getStopsLat())
+            intent.putExtra("stops_lon", viewModel.getStopsLon())
+            selectStopTo.launch(intent)
         }
 
         val settingsButton: ImageButton = findViewById(R.id.button_setting)
@@ -268,10 +391,12 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         val filterButton: ImageButton = findViewById(R.id.button_filter)
         filterButton.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Coming soon", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, FilterActivity::class.java)
+            startActivity(intent)
         }
 
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -291,9 +416,13 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         super.onResume()
         isActive = true
 
+        viewModel.setCare(sharedPref.getBoolean("care", false))
+        viewModel.setChange(sharedPref.getBoolean("change", false))
+        viewModel.setPriority(sharedPref.getInt("priority", 0))
+
         sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
         val isNorth = sharedPref.getBoolean("north_upper", false)
-        if (mapView.mapWindow.map.isRotateGesturesEnabled  && isNorth){
+        if (mapView.mapWindow.map.isRotateGesturesEnabled && isNorth) {
             mapView.mapWindow.map.isRotateGesturesEnabled = false
             mapView.mapWindow.map.move(
                 CameraPosition(
@@ -304,7 +433,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 )
             )
         }
-        if (!mapView.mapWindow.map.isRotateGesturesEnabled  && !isNorth){
+        if (!mapView.mapWindow.map.isRotateGesturesEnabled && !isNorth) {
             mapView.mapWindow.map.isRotateGesturesEnabled = true
         }
     }
@@ -320,7 +449,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
 
     override fun onError(exception: Exception) {
-        if (!isActivityActive()){
+        if (!isActivityActive()) {
             return
         }
         val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)

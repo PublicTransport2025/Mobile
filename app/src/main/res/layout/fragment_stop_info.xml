@@ -8,22 +8,43 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/stop_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Название остановки"
-        android:textSize="24sp"
-        android:textAppearance="@style/DefaultTextReverse"
-        android:layout_margin="10dp"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/stop_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Название остановки"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textAppearance="@style/DefaultTextReverse"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="6dp"
+            android:src="@drawable/close"
+            app:tint="@color/textcolor"/>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/stop_about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="Направление"
-        android:textSize="18sp"
         android:textAppearance="@style/DefaultTextReverse"
-        android:layout_margin="10dp"/>
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,24 +54,24 @@
         <Button
             android:id="@+id/button_from"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Отсюда"
             android:layout_margin="10dp"
-            app:backgroundTint="@color/akcent"
+            android:layout_weight="1"
+            android:text="Отсюда"
+            android:textAppearance="@style/DefaultText"
             android:textColor="@color/button_text"
-            android:textAppearance="@style/DefaultText"/>
+            app:backgroundTint="@color/akcent" />
 
         <Button
             android:id="@+id/button_to"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Сюда"
             android:layout_margin="10dp"
-            app:backgroundTint="@color/akcent"
+            android:layout_weight="1"
+            android:text="Сюда"
+            android:textAppearance="@style/DefaultText"
             android:textColor="@color/button_text"
-            android:textAppearance="@style/DefaultText"/>
+            app:backgroundTint="@color/akcent" />
     </LinearLayout>
 
 
