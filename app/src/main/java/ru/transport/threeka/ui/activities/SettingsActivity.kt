@@ -105,7 +105,8 @@ class SettingsActivity : AppCompatActivity() {
 
         val button7: Button = findViewById(R.id.button_login)
         button7.setOnClickListener {
-            Toast.makeText(this@SettingsActivity, "Coming soon", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         val button8: Button = findViewById(R.id.button_registration)

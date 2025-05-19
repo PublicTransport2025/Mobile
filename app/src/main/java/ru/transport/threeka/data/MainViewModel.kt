@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.appmetrica.analytics.AppMetrica
 import kotlinx.coroutines.launch
@@ -14,11 +13,31 @@ import ru.transport.threeka.api.RetrofitClient.apiService
 import ru.transport.threeka.api.schemas.Coord
 import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.api.schemas.navigation.RouteReport
+import ru.transport.threeka.services.TokenManager
 import ru.transport.threeka.ui.ErrorCallback
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val tokenManager = TokenManager(application)
+
+    private val _authorized = MutableLiveData(false)
+    val authorized: LiveData<Boolean> get() = _authorized
+
     private val _count = MutableLiveData(0)
     val count: LiveData<Int> get() = _count
+
+    private val _likedStop = MutableLiveData(-1)
+    val likedStop: LiveData<Int> get() = _likedStop
+
+    fun setLikedStop(index: Int) {
+        _likedStop.value = index;
+    }
+
+    private val _dislikedStop = MutableLiveData(-1)
+    val dislikedStop: LiveData<Int> get() = _dislikedStop
+
+    fun setDislikedStop(index: Int) {
+        _dislikedStop.value = index;
+    }
 
     private val _care = MutableLiveData(false)
     val care: LiveData<Boolean> get() = _care
@@ -41,9 +60,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _priority.value = bool;
     }
 
-    private val _stops = MutableLiveData<List<Stop>>()
-    val stops: LiveData<List<Stop>> get() = _stops
+    private val _stops = MutableLiveData<MutableList<Stop>>()
+    val stops: LiveData<MutableList<Stop>> get() = _stops
     private var isStopsLoaded = false
+
+    fun replaceStop(index: Int, stop: Stop?) {
+        if (stop != null) {
+            _stops.value!![index] = stop
+        }
+    }
+
 
 
     private val _stopFrom = MutableLiveData<Stop?>()
@@ -107,6 +133,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return _stops.value?.get(index)?.about ?: "Nothing"
     }
 
+    fun getStopLike(index: Int): Boolean {
+        return _stops.value?.get(index)?.like ?: false
+    }
+
+    fun getStopId(index: Int): Int {
+        return _stops.value?.get(index)?.id ?: -1
+    }
+
     fun setStopFrom(index: Int) {
         if (index < 0) {
             return
@@ -145,7 +179,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val response = apiService.getStops().awaitResponse()
+                val response = apiService.getStops(tokenManager.getAccessToken()).awaitResponse()
                 _stops.value = response.body()
                 isStopsLoaded = true
             } catch (e: Exception) {
@@ -407,6 +441,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )?.stop2
                 ?: "Nothing"
         }
+    }
+
+
+    fun refreshTokens() {
+        viewModelScope.launch {
+            val currentRefreshToken = tokenManager.getRefreshToken()
+            if (currentRefreshToken == null) {
+                handleLogout()
+                return@launch
+            }
+
+            try {
+                val response = apiService.refreshToken(currentRefreshToken).awaitResponse()
+                if (response.isSuccessful) {
+                    val token = response.body()
+                    if (token != null) {
+                        tokenManager.saveToken(token)
+                        _authorized.value = true
+                    } else {
+                        handleLogout()
+                    }
+                } else {
+                    handleLogout()
+                }
+            } catch (e: Exception) {
+                Log.e("LoginError", "Не удалось обновить токен" + e.message)
+                handleLogout()
+            }
+
+
+        }
+    }
+
+    private fun handleLogout() {
+        _authorized.value = false
     }
 
 }

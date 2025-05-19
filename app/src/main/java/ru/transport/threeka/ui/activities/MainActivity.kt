@@ -1,9 +1,11 @@
 package ru.transport.threeka.ui.activities
 
+
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -18,8 +20,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.yandex.mapkit.Animation
-
-
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.ScreenPoint
 import com.yandex.mapkit.ScreenRect
@@ -31,10 +31,11 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.MapObjectTapListener
+import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
-
 import ru.transport.threeka.R
+import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
 import ru.transport.threeka.ui.fragments.DoubleRouteFragment
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     }
 
     private var stopsIconsCollection: MapObjectCollection? = null
+    private val placemarks = mutableListOf<PlacemarkMapObject>()
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
         if (newPosition.zoom > 13.9) {
@@ -154,6 +156,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             insets
         }
 
+        viewModel.refreshTokens()
         viewModel.setErrorCallback(this)
         viewModel.setCare(sharedPref.getBoolean("care", false))
         viewModel.setChange(sharedPref.getBoolean("change", false))
@@ -183,21 +186,40 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         val imageProvider = ImageProvider.fromResource(this, R.drawable.stop)
+        val imageProviderLiked = ImageProvider.fromResource(this, R.drawable.stop_liked)
 
         stopsIconsCollection!!.addTapListener(placemarkTapListener)
 
 
         viewModel.loadStops()
         viewModel.stops.observe(this, Observer { stops ->
+            placemarks.clear()
             for (i in stops.indices) {
-                stopsIconsCollection!!.addPlacemark().apply {
+                val placemark = stopsIconsCollection!!.addPlacemark().apply {
                     geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
                     userData = i
-                    setIcon(imageProvider)
+                    if (stops[i].like) {
+                        setIcon(imageProviderLiked)
+                    } else {
+                        setIcon(imageProvider)
+                    }
                 }
+                placemarks.add(placemark)
             }
         })
 
+
+        viewModel.likedStop.observe(this, Observer { index ->
+            if (index in placemarks.indices) {
+                placemarks[index].setIcon(imageProviderLiked)
+            }
+        })
+
+        viewModel.dislikedStop.observe(this, Observer { index ->
+            if (index in placemarks.indices) {
+                placemarks[index].setIcon(imageProvider)
+            }
+        })
 
         val myButton1: Button = findViewById(R.id.myButton1)
         val myButton2: Button = findViewById(R.id.myButton2)

@@ -1,15 +1,38 @@
 package ru.transport.threeka.api
 
 import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 import ru.transport.threeka.api.schemas.Atp
+import ru.transport.threeka.api.schemas.ResponseData
 import ru.transport.threeka.api.schemas.Stop
+import ru.transport.threeka.api.schemas.Token
+import ru.transport.threeka.api.schemas.VKLogin
 import ru.transport.threeka.api.schemas.navigation.RouteReport
 
 interface ApiService {
     @GET("/api/stops")
-    fun getStops(): Call<List<Stop>>
+    fun getStops(
+        @Header("token") token: String?
+    ): Call<MutableList<Stop>>
+
+    @POST("/api/stops")
+    fun likeStop(
+        @Header("token") token: String,
+        @Query("stop_id") stopId: Int
+    ): Call<Stop>
+
+    @DELETE("/api/stops")
+    fun dislikeStop(
+        @Header("token") token: String,
+        @Query("stop_id") stopId: Int
+    ): Call<Stop>
 
     @GET("/api/navigation")
     fun createRoute(
@@ -24,4 +47,19 @@ interface ApiService {
     fun getAtp(
         @Query("number") number: String
     ): Call<Atp>
+
+    @POST("/vklogin")
+    fun loginWithVK(@Body vkLogin: VKLogin): Call<ResponseData>
+
+    @FormUrlEncoded
+    @POST("/api/auth/login")
+    fun login(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Call<Token>
+
+    @POST("/api/auth/refresh")
+    fun refreshToken(
+        @Header("token") refresh: String
+    ): Call<Token>
 }
