@@ -29,6 +29,7 @@ jobs:
           echo "KEY_NAME=${{ secrets.KEY_NAME }}" >> app/local.properties
           echo "KEY_PASS=${{ secrets.KEY_PASS }}" >> app/local.properties
           echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> app/local.properties
+          echo "APPMETRIKA_API_KEY=${{ secrets.APPMETRIKA_API_KEY }}" >> app/local.properties
 
       - name: Decrypt keystore
         run: echo "${{ secrets.MEGAPOLIS_KEY_BASE64 }}" | base64 --decode > app/megapolis.jks
