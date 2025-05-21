@@ -479,6 +479,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun handleLogout() {
+        tokenManager.clearTokens()
         _authorized.value = false
     }
 
