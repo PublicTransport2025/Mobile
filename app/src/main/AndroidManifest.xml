@@ -27,6 +27,9 @@
         <activity android:name="ru.transport.threeka.ui.activities.SettingsActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.FilterActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.AtpActivity" />
+        <activity android:name="ru.transport.threeka.ui.activities.LoginActivity" />
+        <activity android:name="ru.transport.threeka.ui.activities.LoginErrorActivity" />
+        <activity android:name="ru.transport.threeka.ui.activities.RegActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.SelectActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>

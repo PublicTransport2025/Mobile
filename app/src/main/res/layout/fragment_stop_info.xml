@@ -46,6 +46,28 @@
         android:textAppearance="@style/DefaultTextReverse"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/button_like"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Добавить в избранное"
+        android:textColor="@color/button_text"
+        android:textAppearance="@style/DefaultText"
+        app:backgroundTint="@color/akcent" />
+
+    <Button
+        android:id="@+id/button_dislike"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Удалить из избранного"
+        android:textAppearance="@style/DefaultText"
+        android:textColor="@color/akcent"
+        app:backgroundTint="@color/white"
+        app:strokeColor="@color/akcent"
+        app:strokeWidth="2dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

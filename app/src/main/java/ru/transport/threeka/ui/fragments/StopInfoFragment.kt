@@ -9,8 +9,14 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.transport.threeka.R
+import ru.transport.threeka.api.RetrofitClient.apiService
+import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.data.MainViewModel
+import ru.transport.threeka.services.TokenManager
 
 class StopInfoFragment : Fragment() {
 
@@ -46,7 +52,7 @@ class StopInfoFragment : Fragment() {
 
         val stopAbout = view.findViewById<TextView>(R.id.stop_about)
         val about = viewModel.getStopAbout(stop_id)
-        if (about == "Nothing" || about == "" || about == "None"){
+        if (about == "Nothing" || about == "" || about == "None") {
             stopAbout.visibility = View.GONE
         } else {
             stopAbout.text = viewModel.getStopAbout(stop_id)
@@ -76,6 +82,65 @@ class StopInfoFragment : Fragment() {
             viewModel.awakeRoute()
         }
 
+        val buttonLike = view.findViewById<Button>(R.id.button_like)
+        val buttonDislike = view.findViewById<Button>(R.id.button_dislike)
 
+        if (viewModel.authorized.value == true) {
+            if (viewModel.getStopLike(stop_id)) {
+                buttonLike.visibility = View.GONE
+            } else {
+                buttonDislike.visibility = View.GONE
+            }
+        } else {
+            buttonLike.visibility = View.GONE
+            buttonDislike.visibility = View.GONE
+        }
+
+        val tokenManager = TokenManager(requireContext())
+
+        buttonLike.setOnClickListener {
+            val call = apiService.likeStop(
+                tokenManager.getAccessToken()!!,
+                viewModel.getStopId(stop_id)
+            )
+            call.enqueue(object : Callback<Stop> {
+                override fun onResponse(call: Call<Stop>, response: Response<Stop>) {
+                    if (response.isSuccessful) {
+                        val stop = response.body()
+                        viewModel.setLikedStop(stop_id)
+                        viewModel.replaceStop(stop_id, stop)
+                        buttonLike.visibility = View.GONE
+                        buttonDislike.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onFailure(call: Call<Stop>, t: Throwable) {
+
+                }
+            })
+        }
+
+
+        buttonDislike.setOnClickListener {
+            val call = apiService.dislikeStop(
+                tokenManager.getAccessToken()!!,
+                viewModel.getStopId(stop_id)
+            )
+            call.enqueue(object : Callback<Stop> {
+                override fun onResponse(call: Call<Stop>, response: Response<Stop>) {
+                    if (response.isSuccessful) {
+                        val stop = response.body()
+                        viewModel.replaceStop(stop_id, stop)
+                        viewModel.setDislikedStop(stop_id)
+                        buttonDislike.visibility = View.GONE
+                        buttonLike.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onFailure(call: Call<Stop>, t: Throwable) {
+
+                }
+            })
+        }
     }
 }
