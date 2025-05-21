@@ -23,6 +23,7 @@
         app:iconTint="@color/button_text"/>
 
     <TextView
+        android:id="@+id/settings_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -32,6 +33,7 @@
 
 
     <LinearLayout
+        android:id="@+id/entering_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -182,11 +184,22 @@
         android:layout_weight="1" />
 
 
+    <Button
+        android:id="@+id/button_logout"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выйти"
+        android:textAppearance="@style/DefaultTextLight"
+        android:textColor="#BFBFBF"
+        android:textSize="18sp"
+        app:iconTint="@color/textcolor"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
+
         android:text="© Транспорт 2025"
         android:textAppearance="@style/DefaultTextLight" />
 
@@ -195,7 +208,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"
-        android:text="0.1.0"
+        android:text="0.1.2"
         android:textAppearance="@style/DefaultTextLight" />
 
 

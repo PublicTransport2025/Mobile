@@ -10,7 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 import ru.transport.threeka.api.schemas.Atp
-import ru.transport.threeka.api.schemas.ResponseData
+import ru.transport.threeka.api.schemas.Reg
 import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.api.schemas.Token
 import ru.transport.threeka.api.schemas.VKLogin
@@ -48,8 +48,8 @@ interface ApiService {
         @Query("number") number: String
     ): Call<Atp>
 
-    @POST("/vklogin")
-    fun loginWithVK(@Body vkLogin: VKLogin): Call<ResponseData>
+    @POST("/api/auth/loginvk")
+    fun loginWithVK(@Body vkLogin: VKLogin): Call<Token>
 
     @FormUrlEncoded
     @POST("/api/auth/login")
@@ -62,4 +62,7 @@ interface ApiService {
     fun refreshToken(
         @Header("token") refresh: String
     ): Call<Token>
+
+    @POST("/api/auth/signup")
+    fun signup(@Body reg: Reg): Call<Token>
 }

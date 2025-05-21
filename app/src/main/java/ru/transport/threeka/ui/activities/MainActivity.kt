@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -35,7 +34,6 @@ import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import ru.transport.threeka.R
-import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
 import ru.transport.threeka.ui.fragments.DoubleRouteFragment
@@ -134,6 +132,20 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             }
         }
 
+    private val ifLogin =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultData = result.data?.getStringExtra("login")
+                if (resultData == "logout") {
+                    viewModel.setAuth(false)
+                    viewModel.resetStops()
+                } else if (resultData == "enter") {
+                    viewModel.setAuth(true)
+                    viewModel.resetStops()
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
         val isDarkTheme = sharedPref.getBoolean("dark_theme", false)
@@ -193,6 +205,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         viewModel.loadStops()
         viewModel.stops.observe(this, Observer { stops ->
+            for (placemark in placemarks) {
+                stopsIconsCollection!!.remove(placemark)
+            }
             placemarks.clear()
             for (i in stops.indices) {
                 val placemark = stopsIconsCollection!!.addPlacemark().apply {
@@ -408,7 +423,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         val settingsButton: ImageButton = findViewById(R.id.button_setting)
         settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+            ifLogin.launch(intent)
         }
 
         val filterButton: ImageButton = findViewById(R.id.button_filter)

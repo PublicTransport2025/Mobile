@@ -22,6 +22,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _authorized = MutableLiveData(false)
     val authorized: LiveData<Boolean> get() = _authorized
 
+    fun setAuth(bool: Boolean) {
+        _authorized.value = bool;
+    }
+
     private val _count = MutableLiveData(0)
     val count: LiveData<Int> get() = _count
 
@@ -467,7 +471,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             } catch (e: Exception) {
                 Log.e("LoginError", "Не удалось обновить токен" + e.message)
-                handleLogout()
+                errorCallback?.onError(e)
             }
 
 

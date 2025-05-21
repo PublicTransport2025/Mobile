@@ -28,6 +28,7 @@ class NetworkErrorFragment : Fragment() {
 
         val buttonFrom = view.findViewById<Button>(R.id.button_okey)
         buttonFrom.setOnClickListener {
+            viewModel.refreshTokens()
             viewModel.resetStops()
             parentFragmentManager.beginTransaction()
                 .remove(this)
