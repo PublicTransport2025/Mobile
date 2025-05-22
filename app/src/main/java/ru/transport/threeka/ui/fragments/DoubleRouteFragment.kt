@@ -1,6 +1,7 @@
 package ru.transport.threeka.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -156,6 +157,7 @@ class DoubleRouteFragment : Fragment() {
                     val minutes = parts[1].toInt()
 
                     busAlertManager.sendNotif(hours, minutes, routeNumber.text.toString())
+                    Log.w("Bus notuf", routeNumber.text.toString())
                 }
 
                 if (timeLabelDouble.text == "По графику") {

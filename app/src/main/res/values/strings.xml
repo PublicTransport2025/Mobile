@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">3KA</string>
-    <string name="base_url">http://192.168.1.35</string>
+    <string name="base_url">https://transport3ka.ru</string>
 
     <string name="eogpp_phone">+7 (473) 260–51–23</string>
     <string name="url_yandex_map">https://yandex.ru/legal/maps_api/</string>

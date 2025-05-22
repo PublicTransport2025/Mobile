@@ -31,8 +31,11 @@ class BusAlertManager(val context: Context) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("route", route)
         }
+
+        val requestCode = hour * 100 + minute + route.hashCode()
+
         val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
         val calendar: Calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
@@ -42,7 +45,7 @@ class BusAlertManager(val context: Context) {
         val now = Calendar.getInstance()
 
         if (calendar.after(now)) {
-            alarmManager.setExact(
+            alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 pendingIntent
