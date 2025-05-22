@@ -17,18 +17,18 @@ import ru.transport.threeka.api.schemas.VKLogin
 import ru.transport.threeka.api.schemas.navigation.RouteReport
 
 interface ApiService {
-    @GET("/api/stops")
+    @GET("/api/stops/all")
     fun getStops(
         @Header("token") token: String?
     ): Call<MutableList<Stop>>
 
-    @POST("/api/stops")
+    @POST("/api/stops/like")
     fun likeStop(
         @Header("token") token: String,
         @Query("stop_id") stopId: Int
     ): Call<Stop>
 
-    @DELETE("/api/stops")
+    @DELETE("/api/stops/dislike")
     fun dislikeStop(
         @Header("token") token: String,
         @Query("stop_id") stopId: Int
