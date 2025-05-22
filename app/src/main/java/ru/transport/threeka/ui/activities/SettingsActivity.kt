@@ -1,11 +1,12 @@
 package ru.transport.threeka.ui.activities
 
-
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.google.android.material.materialswitch.MaterialSwitch
 import ru.transport.threeka.R
 import ru.transport.threeka.services.TokenManager
@@ -74,6 +76,20 @@ class SettingsActivity : AppCompatActivity() {
             }
             .create()
             .show()
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            val editor = sharedPref.edit()
+            editor.putBoolean("notif", true)
+            editor.apply()
+        } else {
+            val editor = sharedPref.edit()
+            editor.putBoolean("notif", true)
+            editor.apply()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +181,27 @@ class SettingsActivity : AppCompatActivity() {
         notifSwitch.setOnCheckedChangeListener { _, isChecked ->
             val editor = sharedPref.edit()
             if (isChecked) {
-                editor.putBoolean("notif", true)
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    when {
+                        ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED -> {
+                            editor.putBoolean("notif", true)
+                        }
+
+                        shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+
+                        else -> {
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    }
+                } else {
+                    editor.putBoolean("notif", true)
+                }
             } else {
                 editor.putBoolean("notif", false)
             }

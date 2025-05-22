@@ -6,6 +6,7 @@ import com.yandex.mapkit.MapKitFactory
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.AppMetricaConfig
 import ru.transport.threeka.api.RetrofitClient
+import ru.transport.threeka.services.BusAlertManager
 import java.util.Locale
 
 class MainApplication : Application() {
@@ -16,9 +17,11 @@ class MainApplication : Application() {
         RetrofitClient.init(this, BuildConfig.SERVER_API_KEY)
         MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
 
-
         VKID.init(this)
         VKID.instance.setLocale(Locale("ru"))
         VKID.logsEnabled = true
+
+        val busAlertManager = BusAlertManager(this)
+        busAlertManager.createNotificationChannel()
     }
 }
