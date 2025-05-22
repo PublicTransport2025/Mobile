@@ -139,6 +139,43 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifiaction_group">
+
+        <Button
+            android:id="@+id/button_notifiactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="1dp"
+            android:text="Показывать уведомления"
+            android:textColor="@color/button_text"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:icon="@drawable/bell"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconTint="@color/button_text"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/notificationsSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_notifiactions"
+            app:layout_constraintEnd_toEndOf="@+id/button_notifiactions"
+            app:layout_constraintTop_toTopOf="@+id/button_notifiactions"
+            app:thumbTint="@color/akcent"
+            android:textColor="@color/button_text"
+            app:trackDecorationTint="@color/white"
+            app:trackTint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <Button
         android:id="@+id/button_confidentional"
         android:layout_width="match_parent"

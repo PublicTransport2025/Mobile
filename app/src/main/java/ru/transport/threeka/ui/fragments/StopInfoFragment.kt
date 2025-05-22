@@ -1,12 +1,14 @@
 package ru.transport.threeka.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import retrofit2.Call
@@ -111,11 +113,23 @@ class StopInfoFragment : Fragment() {
                         viewModel.replaceStop(stop_id, stop)
                         buttonLike.visibility = View.GONE
                         buttonDislike.visibility = View.VISIBLE
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Сервер не ответил",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e("Profile", "Liking stop error" + response.code())
                     }
                 }
 
                 override fun onFailure(call: Call<Stop>, t: Throwable) {
-
+                    Toast.makeText(
+                        requireContext(),
+                        "Сервер не ответил",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("Profile", "Liking stop error" + t.message)
                 }
             })
         }
@@ -134,11 +148,23 @@ class StopInfoFragment : Fragment() {
                         viewModel.setDislikedStop(stop_id)
                         buttonDislike.visibility = View.GONE
                         buttonLike.visibility = View.VISIBLE
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Сервер не ответил",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e("Profile", "Liking stop error" + response.code())
                     }
                 }
 
                 override fun onFailure(call: Call<Stop>, t: Throwable) {
-
+                    Toast.makeText(
+                        requireContext(),
+                        "Сервер не ответил",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("Profile", "Liking stop error" + t.message)
                 }
             })
         }

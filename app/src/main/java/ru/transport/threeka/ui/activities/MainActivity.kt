@@ -172,6 +172,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         viewModel.setErrorCallback(this)
         viewModel.setCare(sharedPref.getBoolean("care", false))
         viewModel.setChange(sharedPref.getBoolean("change", false))
+        viewModel.setNotif(sharedPref.getBoolean("notif", false))
         viewModel.setPriority(sharedPref.getInt("priority", 0))
 
         MapKitFactory.initialize(this)

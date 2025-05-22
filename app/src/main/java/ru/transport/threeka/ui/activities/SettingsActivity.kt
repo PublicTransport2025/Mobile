@@ -10,11 +10,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -28,9 +25,11 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var themeSwitch: MaterialSwitch
     private lateinit var northSwitch: MaterialSwitch
+    private lateinit var notifSwitch: MaterialSwitch
     private lateinit var sharedPref: SharedPreferences
     private lateinit var header: TextView
     private lateinit var enteringButtons: LinearLayout
+    private lateinit var notificationGroup: ConstraintLayout
     private lateinit var buttonLogout: Button
     private lateinit var tokenManager: TokenManager
 
@@ -43,10 +42,12 @@ class SettingsActivity : AppCompatActivity() {
                         header.text = tokenManager.getLogin()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        notificationGroup.visibility = View.VISIBLE
                     } else if (tokenManager.isVk()) {
                         header.text = tokenManager.getName()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        notificationGroup.visibility = View.VISIBLE
                     }
                     val resultIntent = Intent()
                     resultIntent.putExtra("login", "enter")
@@ -55,7 +56,11 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-    private fun showConfirmationDialog(context: Context, onConfirm: () -> Unit, onCancel: () -> Unit) {
+    private fun showConfirmationDialog(
+        context: Context,
+        onConfirm: () -> Unit,
+        onCancel: () -> Unit
+    ) {
         AlertDialog.Builder(context)
             .setTitle("Выход")
             .setMessage("Точно выйти из аккаунта?")
@@ -81,7 +86,6 @@ class SettingsActivity : AppCompatActivity() {
         button1.setOnClickListener {
             finish()
         }
-
 
 
         val button2: Button = findViewById(R.id.button_confidentional)
@@ -154,6 +158,25 @@ class SettingsActivity : AppCompatActivity() {
             northSwitch.isChecked = !northSwitch.isChecked
         }
 
+        val isNotif = sharedPref.getBoolean("notif", false)
+        notifSwitch = findViewById(R.id.notificationsSwitch)
+        notifSwitch.isChecked = isNotif
+
+        notifSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val editor = sharedPref.edit()
+            if (isChecked) {
+                editor.putBoolean("notif", true)
+            } else {
+                editor.putBoolean("notif", false)
+            }
+            editor.apply()
+        }
+
+        val notifButton: Button = findViewById(R.id.button_notifiactions)
+        notifButton.setOnClickListener {
+            notifSwitch.isChecked = !notifSwitch.isChecked
+        }
+
         val button7: Button = findViewById(R.id.button_login)
         button7.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -190,6 +213,7 @@ class SettingsActivity : AppCompatActivity() {
 
         header = findViewById(R.id.settings_header)
         enteringButtons = findViewById(R.id.entering_buttons)
+        notificationGroup = findViewById(R.id.notifiaction_group)
 
         if (tokenManager.isEmail()) {
             header.text = tokenManager.getLogin()
@@ -199,6 +223,7 @@ class SettingsActivity : AppCompatActivity() {
             enteringButtons.visibility = View.GONE
         } else {
             buttonLogout.visibility = View.GONE
+            notificationGroup.visibility = View.GONE
         }
 
 
