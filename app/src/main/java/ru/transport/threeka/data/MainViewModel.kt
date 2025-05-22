@@ -50,6 +50,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _care.value = bool;
     }
 
+    private val _notif = MutableLiveData(false)
+    val notif: LiveData<Boolean> get() = _notif
+
+    fun setNotif(bool: Boolean) {
+        _notif.value = bool;
+    }
+
     private val _change = MutableLiveData(false)
     val change: LiveData<Boolean> get() = _change
 
