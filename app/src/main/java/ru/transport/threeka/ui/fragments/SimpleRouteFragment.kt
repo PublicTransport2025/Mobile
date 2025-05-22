@@ -1,16 +1,19 @@
 package ru.transport.threeka.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import ru.transport.threeka.R
 import ru.transport.threeka.data.MainViewModel
+import ru.transport.threeka.services.BusAlertManager
 
 class SimpleRouteFragment : Fragment() {
 
@@ -87,8 +90,28 @@ class SimpleRouteFragment : Fragment() {
             viewModel.killRoute()
         }
 
+        val busAlertManager = BusAlertManager(requireContext())
+
         val buttonOk = view.findViewById<Button>(R.id.button_ok)
         buttonOk.setOnClickListener {
+            if (timeLabel.text == "По графику" &&
+                viewModel.authorized.value == true &&
+                viewModel.notif.value == true) {
+
+                val input = timeBegin.text.toString()
+                val timeString = input.substringAfter("в ").trim()
+                val parts = timeString.split(":")
+                val hours = parts[0].toInt()
+                val minutes = parts[1].toInt()
+
+                busAlertManager.sendNotif(hours, minutes, routeNumber.text.toString())
+                Toast.makeText(
+                    requireContext(),
+                    "Вы получите напоминание о прибытии транспорта",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
             val newFragment = BusAbsenceFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, newFragment)
