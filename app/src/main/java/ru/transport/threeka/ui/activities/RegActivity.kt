@@ -12,6 +12,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -23,6 +24,7 @@ import retrofit2.Response
 import ru.transport.threeka.R
 import ru.transport.threeka.api.RetrofitClient.apiService
 import ru.transport.threeka.api.schemas.Reg
+import ru.transport.threeka.api.schemas.ResponseMessage
 import ru.transport.threeka.api.schemas.Token
 import ru.transport.threeka.api.schemas.VKLogin
 import ru.transport.threeka.services.TokenManager
@@ -63,10 +65,63 @@ class RegActivity : AppCompatActivity() {
         val inputName: TextInputEditText = findViewById(R.id.input_name)
         val inputLogin: TextInputEditText = findViewById(R.id.input_login)
         val inputPass: TextInputEditText = findViewById(R.id.input_pass)
+        val inputCode: TextInputEditText = findViewById(R.id.input_code)
         val inputPassDouble: TextInputEditText = findViewById(R.id.input_pass_double)
         val isAgree: CheckBox = findViewById(R.id.ok_confidentional)
         val tokenManager = TokenManager(this)
         val intentError = Intent(this, LoginErrorActivity::class.java)
+
+
+        val buttonSend: Button = findViewById(R.id.button_send)
+        buttonSend.setOnClickListener {
+
+            if (!(!inputLogin.text.toString()
+                    .isBlank() && Patterns.EMAIL_ADDRESS.matcher(inputLogin.text.toString())
+                    .matches())
+            ) {
+                intentError.putExtra(
+                    "error",
+                    "Укажите корректный email-адрес"
+                )
+                startActivity(intentError)
+                return@setOnClickListener
+            }
+
+            val call = apiService.getCode(inputLogin.text.toString())
+            call.enqueue(object : Callback<ResponseMessage> {
+                override fun onResponse(call: Call<ResponseMessage>, response: Response<ResponseMessage>) {
+                    if (response.isSuccessful) {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@RegActivity,
+                                "Код подтверждения отправлен на указанный e-mail адрес",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        runOnUiThread {
+                            val message = when (response.code()) {
+                                400 -> "Такой e-mail уже зарегестрирован"
+                                422 -> "Некорректный адрес электронной почты"
+                                419 -> "Код был отправлен ранее. Запросить новый можно через 5 минут"
+                                500 -> "Отправка кода подтверждения сейчас невозможна. Пожалуйста, зарегистрируйтесь другим способом"
+                                502 -> "Пожалуйста, попробуйте позднее"
+                                else -> "Отправка кода подтверждения сейчас невозможна. Пожалуйста, зарегистрируйтесь другим способом"
+                            }
+                            intentError.putExtra("error", message)
+                            startActivity(intentError)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
+                    runOnUiThread {
+                        intentError.putExtra("error", "Отправка кода подтверждения сейчас невозможна. Пожалуйста, зарегистрируйтесь другим способом")
+                        startActivity(intentError)
+                    }
+                }
+            })
+        }
 
 
         inputPassDouble.setOnEditorActionListener { v, actionId, event ->
@@ -122,10 +177,20 @@ class RegActivity : AppCompatActivity() {
                     return@setOnEditorActionListener false
                 }
 
+                if (inputCode.text.toString().length != 6) {
+                    intentError.putExtra(
+                        "error",
+                        "Получите код подтверждения из 6 цифр"
+                    )
+                    startActivity(intentError)
+                    return@setOnEditorActionListener false
+                }
+
                 val reg = Reg(
                     name = inputName.text.toString(),
                     email = inputLogin.text.toString(),
                     password = inputPass.text.toString(),
+                    code = inputCode.text.toString(),
                 )
 
                 val call = apiService.signup(reg)
@@ -147,8 +212,11 @@ class RegActivity : AppCompatActivity() {
                                 val message = when (response.code()) {
                                     422 -> "Еще раз проверьте заполненность всех полей"
                                     400 -> "Такой email уже зарегестрирован"
-                                    403 -> "Этот аккаунт уже зарегестрирован"
+                                    403 -> "Этот аккаунт заблокирован"
                                     401 -> "Неверный логин или пароль"
+                                    480 -> "Вы не запросили код подтверждения"
+                                    481 -> "Неверный код подтверждения"
+                                    482 -> "Код подтверждения просрочен"
                                     500 -> "Приносим свои извенения, произошла ошибка на сервере"
                                     502 -> "Пожалуйста, попробуйте позднее"
                                     else -> "Произошла неизвестная ошибка"
@@ -227,10 +295,20 @@ class RegActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (inputCode.text.toString().length != 6) {
+                intentError.putExtra(
+                    "error",
+                    "Получите код подтверждения из 6 цифр"
+                )
+                startActivity(intentError)
+                return@setOnClickListener
+            }
+
             val reg = Reg(
                 name = inputName.text.toString(),
                 email = inputLogin.text.toString(),
                 password = inputPass.text.toString(),
+                code = inputCode.text.toString()
             )
 
             val call = apiService.signup(reg)
@@ -252,8 +330,11 @@ class RegActivity : AppCompatActivity() {
                             val message = when (response.code()) {
                                 422 -> "Еще раз проверьте заполненность всех полей"
                                 400 -> "Такой email уже зарегестрирован"
-                                403 -> "Этот аккаунт уже зарегестрирован"
+                                403 -> "Этот аккаунт заблокирован"
                                 401 -> "Неверный логин или пароль"
+                                480 -> "Вы не запросили код подтверждения"
+                                481 -> "Неверный код подтверждения"
+                                482 -> "Код подтверждения просрочен"
                                 500 -> "Приносим свои извенения, произошла ошибка на сервере"
                                 502 -> "Пожалуйста, попробуйте позднее"
                                 else -> "Произошла неизвестная ошибка"
