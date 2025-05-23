@@ -5,8 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,14 +35,17 @@ import com.yandex.mapkit.map.MapObjectTapListener
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
+import io.appmetrica.analytics.AppMetrica
 import ru.transport.threeka.R
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
+import ru.transport.threeka.ui.fragments.AdvFragment
 import ru.transport.threeka.ui.fragments.DoubleRouteFragment
 import ru.transport.threeka.ui.fragments.NetworkErrorFragment
 import ru.transport.threeka.ui.fragments.NoRouteFragment
 import ru.transport.threeka.ui.fragments.SimpleRouteFragment
 import ru.transport.threeka.ui.fragments.StopInfoFragment
+import java.time.LocalDate
 
 
 class MainActivity : AppCompatActivity(), ErrorCallback {
@@ -225,6 +230,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         })
 
 
+
+
         viewModel.likedStop.observe(this, Observer { index ->
             if (index in placemarks.indices) {
                 placemarks[index].setIcon(imageProviderLiked)
@@ -239,8 +246,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
 
         val myButton1: Button = findViewById(R.id.myButton1)
         val myButton2: Button = findViewById(R.id.myButton2)
-
-
 
         viewModel.stopFrom.observe(this, Observer { stop ->
             if (stop == null) {
@@ -432,6 +437,36 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             val intent = Intent(this, FilterActivity::class.java)
             startActivity(intent)
         }
+
+
+        val imageView: ImageView = findViewById(R.id.myImageView)
+
+        val today = LocalDate.now()
+        val targetDate = LocalDate.of(2025, 6, 9)
+        if (today.isBefore(targetDate)) {
+            imageView.visibility = View.VISIBLE
+            val eventParameters = mapOf("type" to "adv1")
+            AppMetrica.reportEvent("AdvShown", eventParameters)
+        }
+        imageView.setOnClickListener {
+            val eventParameters = mapOf("type" to "adv1")
+            AppMetrica.reportEvent("AdvClicked", eventParameters)
+            val existingFragment =
+                supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if (existingFragment != null) {
+                supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+            }
+            val fragment = AdvFragment()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
+        }
+
+        viewModel.adv.observe(this, Observer { adv ->
+            if (adv) {
+                imageView.visibility = View.GONE
+            }
+        })
 
     }
 

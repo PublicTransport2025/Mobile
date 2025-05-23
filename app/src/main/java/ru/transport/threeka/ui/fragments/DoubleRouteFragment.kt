@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import io.appmetrica.analytics.AppMetrica
 import ru.transport.threeka.R
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.services.BusAlertManager
@@ -176,6 +177,13 @@ class DoubleRouteFragment : Fragment() {
                     ).show()
                 }
             }
+
+            val eventParameters =
+                mapOf(
+                    "count" to "double", "number" to routeNumber.text.toString(),
+                    "numberDouble" to routeNumberDouble.text.toString()
+                )
+            AppMetrica.reportEvent("RouteStarted", eventParameters)
 
             val newFragment = BusAbsenceFragment()
             parentFragmentManager.beginTransaction()

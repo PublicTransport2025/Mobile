@@ -1,7 +1,6 @@
 package ru.transport.threeka.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import io.appmetrica.analytics.AppMetrica
 import ru.transport.threeka.R
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.services.BusAlertManager
@@ -53,7 +53,7 @@ class SimpleRouteFragment : Fragment() {
 
         val timeBegin = view.findViewById<TextView>(R.id.time_begin)
         val timeBeginStr = viewModel.getRouteTimeBegin()
-        if (timeBeginStr == "Nothing" || timeBeginStr == "None" || timeBeginStr == "-" || timeBeginStr == ""){
+        if (timeBeginStr == "Nothing" || timeBeginStr == "None" || timeBeginStr == "-" || timeBeginStr == "") {
             timeBegin.visibility = View.GONE
         } else {
             timeBegin.text = timeBeginStr
@@ -62,7 +62,7 @@ class SimpleRouteFragment : Fragment() {
         val timeLabel2 = view.findViewById<TextView>(R.id.time_label2)
         val timeRoad = view.findViewById<TextView>(R.id.time_road)
         val timeRoadStr = viewModel.getRouteTimeRoad()
-        if (timeRoadStr == "Nothing" || timeRoadStr == "None" || timeRoadStr == "-" || timeRoadStr == ""){
+        if (timeRoadStr == "Nothing" || timeRoadStr == "None" || timeRoadStr == "-" || timeRoadStr == "") {
             timeLabel2.visibility = View.GONE
             timeRoad.visibility = View.GONE
         } else {
@@ -73,7 +73,7 @@ class SimpleRouteFragment : Fragment() {
         buttonLeft.setOnClickListener {
             viewModel.left()
         }
-        if (!viewModel.hasLeft()){
+        if (!viewModel.hasLeft()) {
             buttonLeft.visibility = View.INVISIBLE
         }
 
@@ -81,7 +81,7 @@ class SimpleRouteFragment : Fragment() {
         buttonRight.setOnClickListener {
             viewModel.right()
         }
-        if (!viewModel.hasRight()){
+        if (!viewModel.hasRight()) {
             buttonRight.visibility = View.INVISIBLE
         }
 
@@ -96,7 +96,8 @@ class SimpleRouteFragment : Fragment() {
         buttonOk.setOnClickListener {
             if (timeLabel.text == "По графику" &&
                 viewModel.authorized.value == true &&
-                viewModel.notif.value == true) {
+                viewModel.notif.value == true
+            ) {
 
                 val input = timeBegin.text.toString()
                 val timeString = input.substringAfter("в ").trim()
@@ -111,6 +112,10 @@ class SimpleRouteFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+            val eventParameters =
+                mapOf("count" to "simple", "number" to routeNumber.text.toString())
+            AppMetrica.reportEvent("RouteStarted", eventParameters)
 
             val newFragment = BusAbsenceFragment()
             parentFragmentManager.beginTransaction()

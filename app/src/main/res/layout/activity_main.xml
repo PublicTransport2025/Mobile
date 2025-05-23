@@ -12,7 +12,8 @@
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -77,8 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:text="Откуда"
-                    android:textColor="@color/button_text"
                     android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/button_text"
                     app:backgroundTint="@color/akcent" />
 
                 <Button
@@ -87,8 +88,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
                     android:text="Куда"
-                    android:textColor="@color/button_text"
                     android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/button_text"
                     app:backgroundTint="@color/akcent" />
 
             </LinearLayout>
@@ -97,5 +98,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.yandex.mapkit.mapview.MapView>
 
-
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/myImageView"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:background="@color/adv1"
+        android:maxHeight="150px"
+        android:scaleType="fitCenter"
+        android:src="@drawable/adv1" />
 </LinearLayout>

@@ -26,6 +26,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _authorized.value = bool;
     }
 
+    private val _adv = MutableLiveData(false)
+    val adv: LiveData<Boolean> get() = _adv
+
+    fun setAdv(bool: Boolean) {
+        _adv.value = bool;
+    }
+
     private val _count = MutableLiveData(0)
     val count: LiveData<Int> get() = _count
 
@@ -163,7 +170,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         checkRoute()
 
         val eventParameters = mapOf("name" to (_stopFrom.value?.name ?: "-"))
-        AppMetrica.reportEvent("Stop selected", eventParameters)
+        AppMetrica.reportEvent("StopSelected", eventParameters)
     }
 
     fun setStopTo(index: Int) {
@@ -177,7 +184,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         checkRoute()
 
         val eventParameters = mapOf("name" to (_stopTo.value?.name ?: "-"))
-        AppMetrica.reportEvent("Stop selected", eventParameters)
+        AppMetrica.reportEvent("StopSelected", eventParameters)
     }
 
     fun resetStops() {
@@ -228,7 +235,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _acvtiveRoute.value = 1
                     val eventParameters =
                         mapOf("from" to _stopFrom.value!!.name, "to" to _stopTo.value!!.name)
-                    AppMetrica.reportEvent("Route_created", eventParameters)
+                    AppMetrica.reportEvent("RouteCreated", eventParameters)
                 } else {
                     _acvtiveRoute.value = -1
                 }
