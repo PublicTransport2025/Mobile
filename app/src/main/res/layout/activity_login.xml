@@ -9,158 +9,370 @@
     android:orientation="vertical"
     tools:context="ru.transport.threeka.ui.activities.MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp">
+        android:layout_height="match_parent">
 
-
-        <Button
-            android:id="@+id/button_back"
-            style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:textAppearance="@style/DefaultTextSmall"
-            app:backgroundTint="@color/akcent"
-            app:icon="@drawable/left_long"
-            app:iconTint="@color/button_text" />
-
-        <TextView
-            android:id="@+id/textHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-
-            android:text="Вход"
-            android:textAppearance="@style/DefaultTextReverse" />
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/textAtp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginHorizontal="20dp"
-        android:text="Адрес электронной почты"
-        android:textAppearance="@style/DefaultTextReverse"
-        android:textSize="16sp"
-        android:textColor="@color/akcent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlined_login"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:boxStrokeColor="@color/akcent"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
-        app:endIconDrawable="@drawable/close"
-        app:endIconMode="clear_text"
-        app:hintEnabled="false"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="0dp"
-        app:endIconTint="@color/black"
-        android:textColor="@color/black"
-        app:boxBackgroundColor="@color/button_text"
-        app:boxStrokeWidth="2dp"
-        app:boxStrokeWidthFocused="2dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_login"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:textColorHint="@color/button_text"
-            android:textAppearance="@style/DefaultText"
-            app:cursorColor="@color/button_text"
-            android:inputType="text"
-            android:textSize="16sp"
-            android:padding="0dp"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp">
 
 
-    <TextView
-        android:id="@+id/textPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginHorizontal="20dp"
-        android:text="Пароль"
-        android:textAppearance="@style/DefaultTextReverse"
-        android:textSize="16sp"
-        android:textColor="@color/akcent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+                <Button
+                    android:id="@+id/button_back"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:textAppearance="@style/DefaultTextSmall"
+                    app:backgroundTint="@color/akcent"
+                    app:icon="@drawable/left_long"
+                    app:iconTint="@color/button_text" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlined_pass"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:boxStrokeColor="@color/akcent"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
-        app:endIconDrawable="@drawable/close"
-        app:endIconMode="clear_text"
-        app:hintEnabled="false"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="0dp"
-        app:endIconTint="@color/black"
-        android:textColor="@color/black"
-        app:boxBackgroundColor="@color/button_text"
-        app:boxStrokeWidth="2dp"
-        app:boxStrokeWidthFocused="2dp">
+                <TextView
+                    android:id="@+id/textHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_pass"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:textColorHint="@color/button_text"
-            android:textAppearance="@style/DefaultText"
-            app:cursorColor="@color/button_text"
-            android:inputType="textPassword"
-            android:textSize="16sp"
-            android:padding="0dp"
-            android:imeOptions="actionDone"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
+                    android:text="Вход"
+                    android:textAppearance="@style/DefaultTextReverse" />
+            </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/textAtp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginHorizontal="20dp"
+                android:text="Адрес электронной почты"
+                android:textAppearance="@style/DefaultTextReverse"
+                android:textColor="@color/akcent"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlined_login"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="10dp"
+                android:padding="0dp"
+                android:textColor="@color/black"
+                app:boxBackgroundColor="@color/button_text"
+                app:boxCornerRadiusBottomEnd="25dp"
+                app:boxCornerRadiusBottomStart="25dp"
+                app:boxCornerRadiusTopEnd="25dp"
+                app:boxCornerRadiusTopStart="25dp"
+                app:boxStrokeColor="@color/akcent"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:endIconDrawable="@drawable/close"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/black"
+                app:hintEnabled="false">
 
-    <Button
-        android:id="@+id/button_enter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="20dp"
-        android:text="Войти"
-        android:layout_marginBottom="10dp"
-        android:textAppearance="@style/DefaultText"
-        android:textColor="@color/button_text"
-        app:backgroundTint="@color/akcent" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:padding="0dp"
+                    android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/button_text"
+                    android:textSize="16sp"
+                    app:cursorColor="@color/button_text" />
 
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/login_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-   <com.vk.id.onetap.xml.OneTap
-        android:id="@+id/vkidButton"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:vkid_onetapScenario="SignIn"
-        android:layout_marginHorizontal="20dp"
-        app:vkid_buttonsCornerRadius="25dp"/>
+                <TextView
+                    android:id="@+id/textPass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Пароль"
+                    android:textAppearance="@style/DefaultTextReverse"
+                    android:textColor="@color/akcent"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlined_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="0dp"
+                    android:textColor="@color/black"
+                    app:boxBackgroundColor="@color/button_text"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/akcent"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconDrawable="@drawable/close"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_pass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:padding="0dp"
+                        android:textAppearance="@style/DefaultText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/button_text"
+                        android:textSize="16sp"
+                        app:cursorColor="@color/button_text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_to_reser"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:gravity="center"
+                    android:text="Восстановить пароль"
+                    android:textAppearance="@style/DefaultTextLight"
+                    android:textColor="#BFBFBF"
+                    android:textSize="16sp"
+                    app:iconTint="@color/textcolor" />
+
+                <Button
+                    android:id="@+id/button_enter"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Войти"
+                    android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/button_text"
+                    app:backgroundTint="@color/akcent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reset_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Отправить код"
+                    android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/button_text"
+                    app:backgroundTint="@color/akcent" />
+
+                <TextView
+                    android:id="@+id/textCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Код подтверждения"
+                    android:textAppearance="@style/DefaultTextReverse"
+                    android:textColor="@color/akcent"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlined_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="0dp"
+                    android:textColor="@color/black"
+                    app:boxBackgroundColor="@color/button_text"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/akcent"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconDrawable="@drawable/close"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberSigned"
+                        android:padding="0dp"
+                        android:textAppearance="@style/DefaultText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/button_text"
+                        android:textSize="16sp"
+                        app:cursorColor="@color/button_text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/textNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Новый пароль"
+                    android:textAppearance="@style/DefaultTextReverse"
+                    android:textColor="@color/akcent"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlined_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="0dp"
+                    android:textColor="@color/black"
+                    app:boxBackgroundColor="@color/button_text"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/akcent"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconDrawable="@drawable/close"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_new"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPassword"
+                        android:padding="0dp"
+                        android:textAppearance="@style/DefaultText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/button_text"
+                        android:textSize="16sp"
+                        app:cursorColor="@color/button_text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/textNewDouble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Повторите новый пароль"
+                    android:textAppearance="@style/DefaultTextReverse"
+                    android:textColor="@color/akcent"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlined_new_double"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="0dp"
+                    android:textColor="@color/black"
+                    app:boxBackgroundColor="@color/button_text"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/akcent"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconDrawable="@drawable/close"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_new_double"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:padding="0dp"
+                        android:textAppearance="@style/DefaultText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/button_text"
+                        android:textSize="16sp"
+                        app:cursorColor="@color/button_text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_to_login"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:gravity="center"
+                    android:text="Войти по паролю"
+                    android:textAppearance="@style/DefaultTextLight"
+                    android:textColor="#BFBFBF"
+                    android:textSize="16sp"
+                    app:iconTint="@color/textcolor" />
+
+                <Button
+                    android:id="@+id/button_reset"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Восстановить"
+                    android:textAppearance="@style/DefaultText"
+                    android:textColor="@color/button_text"
+                    app:backgroundTint="@color/akcent" />
+            </LinearLayout>
+
+            <com.vk.id.onetap.xml.OneTap
+                android:id="@+id/vkidButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="20dp"
+                app:vkid_buttonsCornerRadius="25dp"
+                app:vkid_onetapScenario="SignIn" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

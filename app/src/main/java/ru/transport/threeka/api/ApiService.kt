@@ -11,6 +11,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import ru.transport.threeka.api.schemas.Atp
 import ru.transport.threeka.api.schemas.Reg
+import ru.transport.threeka.api.schemas.ResetPass
+import ru.transport.threeka.api.schemas.ResponseMessage
 import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.api.schemas.Token
 import ru.transport.threeka.api.schemas.VKLogin
@@ -65,4 +67,17 @@ interface ApiService {
 
     @POST("/api/auth/signup")
     fun signup(@Body reg: Reg): Call<Token>
+
+    @POST("/api/email/send-code")
+    fun getCode(
+        @Query("email") email: String
+    ): Call<ResponseMessage>
+
+    @POST("/api/auth/reset-password")
+    fun resetPass(@Body data: ResetPass): Call<Token>
+
+    @POST("/api/email/resend-code")
+    fun getResetCode(
+        @Query("email") email: String
+    ): Call<ResponseMessage>
 }
