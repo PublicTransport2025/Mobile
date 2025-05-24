@@ -14,4 +14,6 @@
     <color name="background">#FF0A1815</color>
     <color name="textcolor">#FDFDFD</color>
     <color name="link">#FDFDFD</color>
+
+    <color name="adv1">#FF914D</color>
 </resources>

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.materialswitch.MaterialSwitch
+import io.appmetrica.analytics.AppMetrica
 import ru.transport.threeka.R
 import ru.transport.threeka.services.TokenManager
 
@@ -45,11 +46,15 @@ class SettingsActivity : AppCompatActivity() {
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
+                        val eventParameters = mapOf("method" to "email")
+                        AppMetrica.reportEvent("ProfileLogin", eventParameters)
                     } else if (tokenManager.isVk()) {
                         header.text = tokenManager.getName()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
+                        val eventParameters = mapOf("method" to "vk")
+                        AppMetrica.reportEvent("ProfileLogin", eventParameters)
                     }
                     val resultIntent = Intent()
                     resultIntent.putExtra("login", "enter")
@@ -85,6 +90,7 @@ class SettingsActivity : AppCompatActivity() {
             val editor = sharedPref.edit()
             editor.putBoolean("notif", true)
             editor.apply()
+            AppMetrica.reportEvent("NotificationsEnable")
         } else {
             val editor = sharedPref.edit()
             editor.putBoolean("notif", true)
@@ -201,6 +207,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 } else {
                     editor.putBoolean("notif", true)
+                    AppMetrica.reportEvent("NotificationsEnable")
                 }
             } else {
                 editor.putBoolean("notif", false)
@@ -215,12 +222,16 @@ class SettingsActivity : AppCompatActivity() {
 
         val button7: Button = findViewById(R.id.button_login)
         button7.setOnClickListener {
+            val eventParameters = mapOf("method" to "login")
+            AppMetrica.reportEvent("TryLogin", eventParameters)
             val intent = Intent(this, LoginActivity::class.java)
             ifLogin.launch(intent)
         }
 
         val button8: Button = findViewById(R.id.button_registration)
         button8.setOnClickListener {
+            val eventParameters = mapOf("method" to "registration")
+            AppMetrica.reportEvent("TryLogin", eventParameters)
             val intent = Intent(this, RegActivity::class.java)
             ifLogin.launch(intent)
         }

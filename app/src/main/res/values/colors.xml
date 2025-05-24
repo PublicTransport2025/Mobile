@@ -15,4 +15,6 @@
     <color name="button_text">#FDFDFD</color>
     <color name="textcolor">#0A1815</color>
     <color name="link">#377E70</color>
+
+    <color name="adv1">#FF914D</color>
 </resources>
