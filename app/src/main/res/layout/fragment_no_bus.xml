@@ -13,18 +13,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button_no_bus"
+        <TextView
+            android:id="@+id/stop_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="Автобуса нет?"
-            android:textAppearance="@style/DefaultText"
-            android:textColor="@color/akcent"
-            app:backgroundTint="@color/white"
-            app:strokeColor="@color/akcent"
-            app:strokeWidth="2dp" />
+            android:text="Ваш транспорт не\nпришел вовремя?"
+            android:textAlignment="center"
+            android:textAppearance="@style/DefaultTextReverse"
+            android:textSize="24sp" />
 
         <ImageButton
             android:id="@+id/button_close"
@@ -35,12 +34,19 @@
             android:background="?attr/selectableItemBackground"
             android:padding="6dp"
             android:src="@drawable/close"
-            app:tint="@color/textcolor"/>
+            app:tint="@color/textcolor" />
     </LinearLayout>
 
 
-
-
+    <Button
+        android:id="@+id/button_no_bus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Оставить жалобу"
+        android:textAppearance="@style/DefaultText"
+        android:textColor="@color/button_text"
+        app:backgroundTint="@color/akcent" />
 
 
 </LinearLayout>

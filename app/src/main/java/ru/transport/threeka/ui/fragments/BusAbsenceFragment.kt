@@ -30,6 +30,7 @@ class BusAbsenceFragment : Fragment() {
 
         val buttonClose = view.findViewById<ImageButton>(R.id.button_close)
         buttonClose.setOnClickListener {
+            viewModel.killRoute()
             parentFragmentManager.beginTransaction()
                 .remove(this)
                 .commit()

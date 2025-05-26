@@ -40,7 +40,7 @@
                 android:fontFamily="@font/gilroy_bold"
                 android:text="Пушкинская"
                 android:textAppearance="@style/DefaultTextReverse"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/route_number"
@@ -72,7 +72,7 @@
                     android:text="По графику"
                     android:textAppearance="@style/DefaultTextReverse"
 
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/time_begin"
                     android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:text="в 14:24"
                     android:textColor="@color/akcent"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -95,7 +95,7 @@
                     android:text="В пути"
                     android:textAppearance="@style/DefaultTextReverse"
 
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/time_road"
                     android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                     android:fontFamily="@font/gilroy_bold"
                     android:text="23 мин"
                     android:textColor="@color/akcent"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
 
@@ -118,7 +118,7 @@
                 android:text="Загруженность:"
                 android:textAppearance="@style/DefaultTextReverse"
 
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/route_load"
@@ -128,7 +128,7 @@
                 android:fontFamily="@font/gilroy_bold"
                 android:text="Низкая"
                 android:textColor="@color/akcent"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <ImageButton
