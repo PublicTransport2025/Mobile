@@ -209,7 +209,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         stopsIconsCollection!!.addTapListener(placemarkTapListener)
 
 
-        viewModel.loadStops()
         viewModel.stops.observe(this, Observer { stops ->
             for (placemark in placemarks) {
                 stopsIconsCollection!!.remove(placemark)

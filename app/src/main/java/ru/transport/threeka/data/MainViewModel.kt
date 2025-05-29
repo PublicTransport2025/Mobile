@@ -89,7 +89,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
     private val _stopFrom = MutableLiveData<Stop?>()
     val stopFrom: LiveData<Stop?> get() = _stopFrom
 
@@ -192,7 +191,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadStops()
     }
 
-    fun loadStops() {
+    private fun loadStops() {
         if (isStopsLoaded) return
 
         viewModelScope.launch {
@@ -467,6 +466,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val currentRefreshToken = tokenManager.getRefreshToken()
             if (currentRefreshToken == null) {
                 handleLogout()
+                try {
+                    loadStops()
+                } catch (e: Exception) {
+                    isStopsLoaded = false
+                    Log.e("LoginError", "Не загрузить остановки" + e.message)
+                    errorCallback?.onError(e)
+                }
                 return@launch
             }
 
@@ -483,7 +489,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     handleLogout()
                 }
+                loadStops()
             } catch (e: Exception) {
+                isStopsLoaded = false
                 Log.e("LoginError", "Не удалось обновить токен" + e.message)
                 errorCallback?.onError(e)
             }
