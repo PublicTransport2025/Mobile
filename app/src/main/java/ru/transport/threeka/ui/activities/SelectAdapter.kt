@@ -6,14 +6,16 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.button.MaterialButton
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import ru.transport.threeka.R
 
-class SelectAdapter(private val activity: Activity,
-                    private val buttons: MutableList<String>,
-                    private val indexes: MutableList<Int>,
-                    private val icons: MutableList<Int>) :
+class SelectAdapter(
+    private val activity: Activity,
+    private val buttons: MutableList<String>,
+    private val indexes: MutableList<Int>,
+    private val icons: MutableList<Int>
+) :
     RecyclerView.Adapter<SelectAdapter.ButtonViewHolder>() {
 
     inner class ButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,8 +30,10 @@ class SelectAdapter(private val activity: Activity,
 
     override fun onBindViewHolder(holder: ButtonViewHolder, position: Int) {
         holder.button.text = buttons[position]
-        if (icons[position] == 1){
+        if (icons[position] == 1) {
             holder.button.setIconResource(R.drawable.map)
+        } else if (icons[position] == 2) {
+            holder.button.setIconResource(R.drawable.north)
         }
         holder.button.setOnClickListener {
             val resultIntent = Intent()
@@ -42,13 +46,13 @@ class SelectAdapter(private val activity: Activity,
     override fun getItemCount(): Int = buttons.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addButton(text: List<String>, numbers: List<Int>) {
+    fun addButton(text: List<String>, numbers: List<Int>, likes: List<Boolean>) {
         buttons.clear()
         buttons.addAll(text)
         indexes.clear()
         indexes.addAll(numbers)
         icons.clear()
-        icons.addAll(MutableList(buttons.size) { 0 })
+        icons.addAll(likes.map { if (it) 2 else 0 })
         notifyDataSetChanged()
     }
 

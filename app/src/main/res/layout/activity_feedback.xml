@@ -167,10 +167,11 @@
         app:boxStrokeColor="@color/akcent"
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="2dp"
-        app:endIconDrawable="@drawable/close"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/black"
         app:hintEnabled="false">
+        <!-- app:endIconDrawable="@drawable/close"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/black" -->
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_about"
@@ -192,12 +193,12 @@
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:layout_gravity="left"
-        android:textSize="16sp"
-
+        android:layout_marginHorizontal="20dp"
         android:text="Как вы оцениваете наши расчёты загруженности общественного транспорта?"
-        android:textAppearance="@style/DefaultTextReverse" />
+
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -23,6 +23,9 @@ import ru.transport.threeka.services.TokenManager
 class StopInfoFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
+    private var stop_id = 0;
+    private lateinit var buttonLike: Button
+    private lateinit var buttonDislike: Button
 
     companion object {
         private const val STOP_ID = "0"
@@ -44,10 +47,26 @@ class StopInfoFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_stop_info, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.authorized.value == true) {
+            if (viewModel.getStopLike(stop_id)) {
+                buttonLike.visibility = View.GONE
+                buttonDislike.visibility = View.VISIBLE
+            } else {
+                buttonLike.visibility = View.VISIBLE
+                buttonDislike.visibility = View.GONE
+            }
+        } else {
+            buttonLike.visibility = View.GONE
+            buttonDislike.visibility = View.GONE
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val stop_id = arguments?.getInt(STOP_ID) ?: 0
+        stop_id = arguments?.getInt(STOP_ID) ?: 0
 
         val stopName = view.findViewById<TextView>(R.id.stop_name)
         stopName.text = viewModel.getStopName(stop_id)
@@ -84,8 +103,8 @@ class StopInfoFragment : Fragment() {
             viewModel.awakeRoute()
         }
 
-        val buttonLike = view.findViewById<Button>(R.id.button_like)
-        val buttonDislike = view.findViewById<Button>(R.id.button_dislike)
+        buttonLike = view.findViewById(R.id.button_like)
+        buttonDislike = view.findViewById(R.id.button_dislike)
 
         if (viewModel.authorized.value == true) {
             if (viewModel.getStopLike(stop_id)) {

@@ -43,7 +43,8 @@ interface ApiService {
         @Query("to_id") toId: Int,
         @Query("care") care: Boolean,
         @Query("change") change: Boolean,
-        @Query("priority") priority: Int
+        @Query("priority") priority: Int,
+        @Query("time") time: Int?
     ): Call<RouteReport>
 
     @GET("/api/atp")

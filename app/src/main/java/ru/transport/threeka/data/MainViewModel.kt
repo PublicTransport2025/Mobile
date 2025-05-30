@@ -71,6 +71,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _change.value = bool;
     }
 
+    private val _time = MutableLiveData<Int?>()
+    val time: LiveData<Int?> get() = _time
+
+    fun setTime(newTime: Int?) {
+        _time.value = newTime;
+    }
+
     private val _priority = MutableLiveData(0)
     val priority: LiveData<Int> get() = _priority
 
@@ -104,6 +111,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         _stopFrom.value = null;
         _stopTo.value = null;
+        _time.value = null;
     }
 
 
@@ -226,7 +234,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val care_ = _care.value ?: false
                 val change_ = _change.value ?: false
                 val priority_ = _priority.value ?: 0
-                val response = apiService.createRoute(fromId, toId, care_, change_, priority_)
+                val response = apiService
+                    .createRoute(fromId, toId, care_, change_, priority_, _time.value)
                     .awaitResponse()
                 _routeReport.value = response.body()
                 val result = _routeReport.value?.result ?: 0
@@ -339,6 +348,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val array = DoubleArray(_stops.value?.size ?: 0)
         for (i in (_stops.value ?: listOf()).indices) {
             array[i] = (_stops.value ?: listOf())[i].coord.lon
+        }
+        return array
+    }
+
+    fun getStopsLikes(): BooleanArray {
+        val array = BooleanArray(_stops.value?.size ?: 0)
+        for (i in (_stops.value ?: listOf()).indices) {
+            array[i] = (_stops.value ?: listOf())[i].like
         }
         return array
     }
