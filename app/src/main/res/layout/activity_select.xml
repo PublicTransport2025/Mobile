@@ -6,29 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="ru.transport.threeka.ui.activities.SelectActivity"
-    android:fitsSystemWindows="true">
+    tools:context="ru.transport.threeka.ui.activities.SelectActivity">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="25dp" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginHorizontal="20dp"
         android:id="@+id/outlinedTextField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/akcent_background"
+        android:textColor="@color/button_text"
         app:boxStrokeColor="@color/akcent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:endIconDrawable="@drawable/close"
         app:endIconMode="clear_text"
+        app:endIconTint="@color/button_text"
         app:hintEnabled="false"
         app:startIconDrawable="@drawable/left_long"
         app:startIconTint="@color/button_text"
-        app:endIconTint="@color/button_text"
-        android:textColor="@color/button_text"
-        android:background="@drawable/akcent_background"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
 
         >
 
@@ -36,22 +37,33 @@
             android:id="@+id/inputTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/button_text"
-            android:textColorHint="@color/button_text"
-            android:textAppearance="@style/DefaultText"
-            app:cursorColor="@color/button_text"
+            android:hint="Откуда"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            android:hint="Откуда" />
+            android:textAppearance="@style/DefaultText"
+            android:textColor="@color/button_text"
+            android:textColorHint="@color/button_text"
+            app:cursorColor="@color/button_text" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Время отправления"
+        android:layout_marginHorizontal="20dp"
+        android:textAppearance="@style/DefaultText"
+        android:textColor="@color/button_text"
+        app:backgroundTint="@color/akcent"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_marginHorizontal="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

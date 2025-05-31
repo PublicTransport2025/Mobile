@@ -38,6 +38,7 @@
         <activity android:name="ru.transport.threeka.ui.activities.LoginActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.LoginErrorActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.RegActivity" />
+        <activity android:name="ru.transport.threeka.ui.activities.FeedbackActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.SelectActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <receiver android:name="ru.transport.threeka.services.AlarmReceiver"

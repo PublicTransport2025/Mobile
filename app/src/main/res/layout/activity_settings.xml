@@ -177,6 +177,18 @@
             app:trackTint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/button_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="1dp"
+        android:text="Оставить отзыв"
+        android:textAppearance="@style/DefaultTextSmall"
+        app:backgroundTint="@color/akcent"
+        android:textColor="@color/button_text"
+        app:icon="@drawable/feedback"
+        app:iconTint="@color/button_text"/>
 
     <Button
         android:id="@+id/button_confidentional"

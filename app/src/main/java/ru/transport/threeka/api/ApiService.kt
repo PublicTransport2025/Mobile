@@ -16,6 +16,7 @@ import ru.transport.threeka.api.schemas.ResponseMessage
 import ru.transport.threeka.api.schemas.Stop
 import ru.transport.threeka.api.schemas.Token
 import ru.transport.threeka.api.schemas.VKLogin
+import ru.transport.threeka.api.schemas.navigation.Feedback
 import ru.transport.threeka.api.schemas.navigation.RouteReport
 
 interface ApiService {
@@ -42,7 +43,8 @@ interface ApiService {
         @Query("to_id") toId: Int,
         @Query("care") care: Boolean,
         @Query("change") change: Boolean,
-        @Query("priority") priority: Int
+        @Query("priority") priority: Int,
+        @Query("time") time: Int?
     ): Call<RouteReport>
 
     @GET("/api/atp")
@@ -79,5 +81,11 @@ interface ApiService {
     @POST("/api/email/resend-code")
     fun getResetCode(
         @Query("email") email: String
+    ): Call<ResponseMessage>
+
+    @POST("/api/feedback/write")
+    fun writeFeedback(
+        @Header("token") token: String,
+        @Body feedback: Feedback
     ): Call<ResponseMessage>
 }

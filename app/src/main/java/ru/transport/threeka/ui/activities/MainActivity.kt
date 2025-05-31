@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -70,14 +71,15 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         }
 
         val fragment = StopInfoFragment.newInstance(obj.userData as Int)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
-            .commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
         true
     }
 
     private var stopsIconsCollection: MapObjectCollection? = null
+    private var stopsIconsCollectionLikes: MapObjectCollection? = null
+
     private val placemarks = mutableListOf<PlacemarkMapObject>()
+
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
         if (newPosition.zoom > 13.9) {
@@ -99,16 +101,16 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                                 Point(
                                     viewModel.stopFrom.value?.coord?.lat!!,
                                     viewModel.stopFrom.value?.coord?.lon!!
-                                ),
-                                /* zoom = */ 16.0f,
-                                /* azimuth = */ 0.0f,
-                                /* tilt = */ 0.0f
-                            ),
-                            Animation(Animation.Type.SMOOTH, 0.5f),
-                            null
+                                ),/* zoom = */ 16.0f,/* azimuth = */ 0.0f,/* tilt = */ 0.0f
+                            ), Animation(Animation.Type.SMOOTH, 0.5f), null
                         )
                     }
                 }
+                var resultTime = result.data?.getIntExtra("time", -1)
+                if (resultTime != null && resultTime < 1) {
+                    resultTime = null
+                }
+                viewModel.setTime(resultTime)
             }
         }
 
@@ -124,16 +126,16 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                                 Point(
                                     viewModel.stopTo.value?.coord?.lat!!,
                                     viewModel.stopTo.value?.coord?.lon!!
-                                ),
-                                /* zoom = */ 16.0f,
-                                /* azimuth = */ 0.0f,
-                                /* tilt = */ 0.0f
-                            ),
-                            Animation(Animation.Type.SMOOTH, 0.5f),
-                            null
+                                ),/* zoom = */ 16.0f,/* azimuth = */ 0.0f,/* tilt = */ 0.0f
+                            ), Animation(Animation.Type.SMOOTH, 0.5f), null
                         )
                     }
                 }
+                var resultTime = result.data?.getIntExtra("time", -1)
+                if (resultTime != null && resultTime < 1) {
+                    resultTime = null
+                }
+                viewModel.setTime(resultTime)
             }
         }
 
@@ -186,10 +188,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         mapView.mapWindow.map.isRotateGesturesEnabled = !isNorth
         mapView.mapWindow.map.move(
             CameraPosition(
-                Point(51.68, 39.2),
-                /* zoom = */ 12.0f,
-                /* azimuth = */ 0.0f,
-                /* tilt = */ 0.0f
+                Point(51.68, 39.2),/* zoom = */ 12.0f,/* azimuth = */ 0.0f,/* tilt = */ 0.0f
             )
         )
         Toast.makeText(
@@ -202,50 +201,126 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             "[{\"tags\": {\"any\": [\"poi\", \"transit\"]}, \"stylers\": {\"visibility\": \"off\"}}]";
         mapView.mapWindow.map.setMapStyle(style);
 
-        stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         val imageProvider = ImageProvider.fromResource(this, R.drawable.stop)
         val imageProviderLiked = ImageProvider.fromResource(this, R.drawable.stop_liked)
 
+        stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         stopsIconsCollection!!.addTapListener(placemarkTapListener)
 
+        stopsIconsCollectionLikes = mapView.mapWindow.map.mapObjects.addCollection()
+        stopsIconsCollectionLikes!!.addTapListener(placemarkTapListener)
 
-        viewModel.loadStops()
+
         viewModel.stops.observe(this, Observer { stops ->
-            for (placemark in placemarks) {
-                stopsIconsCollection!!.remove(placemark)
-            }
+            //for (placemark in placemarks) {
+            //    stopsIconsCollection!!.remove(placemark)
+            //}
+            //for (placemark in placemarksLikes) {
+            //    stopsIconsCollectionLikes!!.remove(placemark)
+            //}
+            stopsIconsCollection!!.clear()
+            stopsIconsCollectionLikes!!.clear()
             placemarks.clear()
+            //placemarksLikes.clear()
             for (i in stops.indices) {
-                val placemark = stopsIconsCollection!!.addPlacemark().apply {
-                    geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
-                    userData = i
-                    if (stops[i].like) {
+                if (stops[i].like) {
+                    val placemark = stopsIconsCollectionLikes!!.addPlacemark().apply {
+                        geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
+                        userData = i
                         setIcon(imageProviderLiked)
-                    } else {
+                    }
+                    //placemarksLikes.add(placemark)
+                    placemarks.add(placemark)
+                } else {
+                    val placemark = stopsIconsCollection!!.addPlacemark().apply {
+                        geometry = Point(stops[i].coord.lat, stops[i].coord.lon)
+                        userData = i
                         setIcon(imageProvider)
                     }
+                    placemarks.add(placemark)
                 }
-                placemarks.add(placemark)
             }
         })
 
-
-
-
         viewModel.likedStop.observe(this, Observer { index ->
             if (index in placemarks.indices) {
-                placemarks[index].setIcon(imageProviderLiked)
+                val lon = placemarks[index].geometry.longitude
+                val lat = placemarks[index].geometry.latitude
+                stopsIconsCollection!!.remove(placemarks[index])
+                val placemark = stopsIconsCollectionLikes!!.addPlacemark().apply {
+                    geometry = Point(lat, lon)
+                    userData = index
+                    setIcon(imageProviderLiked)
+                }
+                placemarks[index] = placemark
             }
         })
 
         viewModel.dislikedStop.observe(this, Observer { index ->
             if (index in placemarks.indices) {
-                placemarks[index].setIcon(imageProvider)
+                val lon = placemarks[index].geometry.longitude
+                val lat = placemarks[index].geometry.latitude
+                stopsIconsCollectionLikes!!.remove(placemarks[index])
+                val placemark = stopsIconsCollection!!.addPlacemark().apply {
+                    geometry = Point(lat, lon)
+                    userData = index
+                    setIcon(imageProvider)
+                }
+                placemarks[index] = placemark
             }
         })
 
+        /*viewModel.likedStop.observe(this, Observer { index ->
+            for (i in placemarks.indices) {
+                if (index == placemarks[i].userData) {
+                    val lon = placemarks[i].geometry.longitude
+                    val lat = placemarks[i].geometry.latitude
+                    stopsIconsCollection!!.remove(placemarks[i])
+                    val placemark = stopsIconsCollectionLikes!!.addPlacemark().apply {
+                        geometry = Point(lat, lon)
+                        userData = index
+                        setIcon(imageProviderLiked)
+                    }
+                    placemarksLikes.add(placemark)
+                    placemarks.remove(placemarks[i])
+                    break
+
+                    placemarks.set
+                }
+            }
+        })
+
+        viewModel.dislikedStop.observe(this, Observer { index ->
+            for (i in placemarksLikes.indices) {
+                if (index == placemarksLikes[i].userData) {
+                    val lon = placemarksLikes[i].geometry.longitude
+                    val lat = placemarksLikes[i].geometry.latitude
+                    stopsIconsCollectionLikes!!.remove(placemarksLikes[i])
+                    val placemark = stopsIconsCollection!!.addPlacemark().apply {
+                        geometry = Point(lat, lon)
+                        userData = index
+                        setIcon(imageProvider)
+                    }
+                    placemarks.add(placemark)
+                    placemarksLikes.remove(placemarksLikes[i])
+                    break
+                }
+            }
+        })*/
+
         val myButton1: Button = findViewById(R.id.myButton1)
         val myButton2: Button = findViewById(R.id.myButton2)
+        val timeLabel: TextView = findViewById(R.id.time_header)
+
+        viewModel.time.observe(this, { time ->
+            if (time == null) {
+                timeLabel.visibility = View.GONE
+            } else {
+                timeLabel.visibility = View.VISIBLE
+                timeLabel.text = String.format("Отправление в %d:%02d", time / 60, time % 60)
+
+            }
+        })
 
         viewModel.stopFrom.observe(this, Observer { stop ->
             if (stop == null) {
@@ -272,13 +347,11 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 }
                 if (viewModel.isSimple()) {
                     val fragment = SimpleRouteFragment()
-                    supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, fragment)
+                    supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                         .commit()
                 } else {
                     val fragment = DoubleRouteFragment()
-                    supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, fragment)
+                    supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                         .commit()
                 }
 
@@ -397,8 +470,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     supportFragmentManager.beginTransaction().remove(existingFragment).commit()
                 }
                 val fragment = NoRouteFragment()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
+                supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit()
             }
         })
@@ -413,6 +485,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             intent.putExtra("stops", viewModel.getStops())
             intent.putExtra("stops_lat", viewModel.getStopsLat())
             intent.putExtra("stops_lon", viewModel.getStopsLon())
+            intent.putExtra("stops_like", viewModel.getStopsLikes())
+            intent.putExtra("time", viewModel.time.value ?: -1)
             selectStopFrom.launch(intent)
         }
 
@@ -423,6 +497,8 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             intent.putExtra("stops", viewModel.getStops())
             intent.putExtra("stops_lat", viewModel.getStopsLat())
             intent.putExtra("stops_lon", viewModel.getStopsLon())
+            intent.putExtra("stops_like", viewModel.getStopsLikes())
+            intent.putExtra("time", viewModel.time.value ?: -1)
             selectStopTo.launch(intent)
         }
 
@@ -451,14 +527,12 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         imageView.setOnClickListener {
             val eventParameters = mapOf("type" to "adv1")
             AppMetrica.reportEvent("AdvClicked", eventParameters)
-            val existingFragment =
-                supportFragmentManager.findFragmentById(R.id.fragment_container)
+            val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
             if (existingFragment != null) {
                 supportFragmentManager.beginTransaction().remove(existingFragment).commit()
             }
             val fragment = AdvFragment()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                 .commit()
         }
 
@@ -500,10 +574,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             mapView.mapWindow.map.isRotateGesturesEnabled = false
             mapView.mapWindow.map.move(
                 CameraPosition(
-                    Point(51.68, 39.2),
-                    /* zoom = */ 12.0f,
-                    /* azimuth = */ 0.0f,
-                    /* tilt = */ 0.0f
+                    Point(51.68, 39.2),/* zoom = */ 12.0f,/* azimuth = */ 0.0f,/* tilt = */ 0.0f
                 )
             )
         }
@@ -531,8 +602,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             supportFragmentManager.beginTransaction().remove(existingFragment).commit()
         }
         val fragment = NetworkErrorFragment()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
-            .commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
     }
 }

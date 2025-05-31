@@ -34,6 +34,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var enteringButtons: LinearLayout
     private lateinit var notificationGroup: ConstraintLayout
     private lateinit var buttonLogout: Button
+    private lateinit var buttonFeedback: Button
     private lateinit var tokenManager: TokenManager
 
     private val ifLogin =
@@ -45,6 +46,7 @@ class SettingsActivity : AppCompatActivity() {
                         header.text = tokenManager.getLogin()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        buttonFeedback.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
                         val eventParameters = mapOf("method" to "email")
                         AppMetrica.reportEvent("ProfileLogin", eventParameters)
@@ -52,6 +54,7 @@ class SettingsActivity : AppCompatActivity() {
                         header.text = tokenManager.getName()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        buttonFeedback.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
                         val eventParameters = mapOf("method" to "vk")
                         AppMetrica.reportEvent("ProfileLogin", eventParameters)
@@ -239,9 +242,14 @@ class SettingsActivity : AppCompatActivity() {
         tokenManager = TokenManager(this)
 
         buttonLogout = findViewById(R.id.button_logout)
+        buttonFeedback = findViewById(R.id.button_feedback)
+
+        buttonFeedback.setOnClickListener {
+            val intent = Intent(this, FeedbackActivity::class.java)
+            startActivity(intent)
+        }
 
         buttonLogout.setOnClickListener {
-
             showConfirmationDialog(this,
                 onConfirm = {
                     tokenManager.clearTokens()
@@ -251,11 +259,8 @@ class SettingsActivity : AppCompatActivity() {
                     finish()
                 },
                 onCancel = {
-
                 }
             )
-
-
         }
 
         header = findViewById(R.id.settings_header)
@@ -270,6 +275,7 @@ class SettingsActivity : AppCompatActivity() {
             enteringButtons.visibility = View.GONE
         } else {
             buttonLogout.visibility = View.GONE
+            buttonFeedback.visibility = View.GONE
             notificationGroup.visibility = View.GONE
         }
 
