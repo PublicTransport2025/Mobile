@@ -59,8 +59,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    private val _addedEvent = MutableLiveData<Event>()
-    val addedEvent: LiveData<Event> get() = _addedEvent
+    private val _addedEvent = MutableLiveData<Event?>()
+    val addedEvent: LiveData<Event?> get() = _addedEvent
 
 
     private val _care = MutableLiveData(false)
