@@ -1,4 +1,4 @@
-package ru.transport.threeka.api.schemas.navigation
+package ru.transport.threeka.api.schemas.profile
 
 data class Feedback(
     val name: String,

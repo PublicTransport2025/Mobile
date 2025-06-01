@@ -96,7 +96,7 @@ class SettingsActivity : AppCompatActivity() {
             AppMetrica.reportEvent("NotificationsEnable")
         } else {
             val editor = sharedPref.edit()
-            editor.putBoolean("notif", true)
+            editor.putBoolean("notif", false)
             editor.apply()
         }
     }
@@ -190,7 +190,6 @@ class SettingsActivity : AppCompatActivity() {
         notifSwitch.setOnCheckedChangeListener { _, isChecked ->
             val editor = sharedPref.edit()
             if (isChecked) {
-
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                     when {
                         ContextCompat.checkSelfPermission(

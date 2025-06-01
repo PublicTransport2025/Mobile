@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -30,6 +31,8 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.geometry.Polyline
 import com.yandex.mapkit.map.CameraListener
 import com.yandex.mapkit.map.CameraPosition
+import com.yandex.mapkit.map.InputListener
+import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.map.MapObject
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.MapObjectTapListener
@@ -42,8 +45,10 @@ import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
 import ru.transport.threeka.ui.fragments.AdvFragment
 import ru.transport.threeka.ui.fragments.DoubleRouteFragment
+import ru.transport.threeka.ui.fragments.EventInfoFragment
 import ru.transport.threeka.ui.fragments.NetworkErrorFragment
 import ru.transport.threeka.ui.fragments.NoRouteFragment
+import ru.transport.threeka.ui.fragments.PointInfoFragment
 import ru.transport.threeka.ui.fragments.SimpleRouteFragment
 import ru.transport.threeka.ui.fragments.StopInfoFragment
 import java.time.LocalDate
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     private lateinit var mapView: MapView
     private var polylineObject: MapObject? = null
     private var polylineObject2: MapObject? = null
-
+    private lateinit var imageProviderPoint: ImageProvider
 
     private val placemarkTapListener = MapObjectTapListener { obj, _ ->
         //Toast.makeText(this@MainActivity,"${obj.userData}", Toast.LENGTH_SHORT).show()
@@ -75,17 +80,67 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         true
     }
 
+    private val placemarkTapListenerEvent = MapObjectTapListener { obj, _ ->
+        //Toast.makeText(this@MainActivity,"${obj.userData}", Toast.LENGTH_SHORT).show()
+
+        val existingFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (existingFragment != null) {
+            supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+        }
+
+        val fragment = EventInfoFragment.newInstance(obj.userData as Int)
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
+        true
+    }
+
     private var stopsIconsCollection: MapObjectCollection? = null
     private var stopsIconsCollectionLikes: MapObjectCollection? = null
 
     private val placemarks = mutableListOf<PlacemarkMapObject>()
 
+    private var stopsIconsCollectionEvents: MapObjectCollection? = null
+    private val placemarksEvents = mutableListOf<PlacemarkMapObject>()
+
+    private var pointCollection: MapObjectCollection? = null
+    private var thePoint: PlacemarkMapObject? = null
+
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
         if (newPosition.zoom > 13.9) {
             stopsIconsCollection?.setVisible(true)
+            stopsIconsCollectionEvents?.setVisible(true)
         } else {
             stopsIconsCollection?.setVisible(false)
+            stopsIconsCollectionEvents?.setVisible(false)
+        }
+    }
+
+    val inputListener = object : InputListener {
+        override fun onMapTap(map: Map, point: Point) {
+            // Handle single tap ...
+        }
+
+        override fun onMapLongTap(map: Map, point: Point) {
+            if (stopsIconsCollection?.isVisible ?: false) {
+
+                thePoint = pointCollection!!.addPlacemark().apply {
+                    geometry = Point(point.latitude, point.longitude)
+                    setIcon(imageProviderPoint)
+                }
+
+                val existingFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (existingFragment != null) {
+                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                }
+
+                val fragment = PointInfoFragment.newInstance(point.latitude, point.longitude)
+                supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+                    .commit()
+            } else {
+                Toast.makeText(this@MainActivity, "Увеличьте масштаб карты", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 
@@ -197,18 +252,28 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             Toast.LENGTH_SHORT
         ).show()
 
+        mapView.mapWindow.map.addInputListener(inputListener)
+
         val style =
             "[{\"tags\": {\"any\": [\"poi\", \"transit\"]}, \"stylers\": {\"visibility\": \"off\"}}]";
         mapView.mapWindow.map.setMapStyle(style);
 
         val imageProvider = ImageProvider.fromResource(this, R.drawable.stop)
         val imageProviderLiked = ImageProvider.fromResource(this, R.drawable.stop_liked)
+        val imageProviderEvent = ImageProvider.fromResource(this, R.drawable.road_event)
+        imageProviderPoint = ImageProvider.fromResource(this, R.drawable.point)
 
         stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         stopsIconsCollection!!.addTapListener(placemarkTapListener)
 
         stopsIconsCollectionLikes = mapView.mapWindow.map.mapObjects.addCollection()
         stopsIconsCollectionLikes!!.addTapListener(placemarkTapListener)
+
+        stopsIconsCollectionEvents = mapView.mapWindow.map.mapObjects.addCollection()
+        stopsIconsCollectionEvents!!.addTapListener(placemarkTapListenerEvent)
+
+        pointCollection = mapView.mapWindow.map.mapObjects.addCollection()
+
 
 
         viewModel.stops.observe(this, Observer { stops ->
@@ -242,6 +307,20 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             }
         })
 
+
+        viewModel.events.observe(this, Observer { events ->
+            stopsIconsCollectionEvents!!.clear()
+            placemarksEvents.clear()
+            for (i in events.indices) {
+                val placemark = stopsIconsCollectionEvents!!.addPlacemark().apply {
+                    geometry = Point(events[i].lat.toDouble(), events[i].lon.toDouble())
+                    userData = i
+                    setIcon(imageProviderEvent)
+                }
+                placemarksEvents.add(placemark)
+            }
+        })
+
         viewModel.likedStop.observe(this, Observer { index ->
             if (index in placemarks.indices) {
                 val lon = placemarks[index].geometry.longitude
@@ -264,9 +343,33 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 val placemark = stopsIconsCollection!!.addPlacemark().apply {
                     geometry = Point(lat, lon)
                     userData = index
-                    setIcon(imageProvider)
+                    setIcon(imageProviderEvent)
                 }
                 placemarks[index] = placemark
+            }
+        })
+
+        viewModel.clearPoint.observe(this, Observer { index ->
+            if (thePoint != null) {
+                pointCollection!!.remove(thePoint!!)
+            }
+        })
+
+
+        viewModel.deletedEvent.observe(this, Observer { index ->
+            if (index in placemarksEvents.indices) {
+                stopsIconsCollectionEvents!!.remove(placemarksEvents[index])
+            }
+        })
+
+        viewModel.addedEvent.observe(this, Observer { event ->
+            if (event != null) {
+                val placemark = stopsIconsCollectionEvents!!.addPlacemark().apply {
+                    geometry = Point(event.lat.toDouble(), event.lon.toDouble())
+                    userData = placemarksEvents.size
+                    setIcon(imageProviderEvent)
+                }
+                placemarksEvents.add(placemark)
             }
         })
 

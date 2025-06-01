@@ -10,9 +10,10 @@ import io.appmetrica.analytics.AppMetrica
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
 import ru.transport.threeka.api.RetrofitClient.apiService
-import ru.transport.threeka.api.schemas.Coord
-import ru.transport.threeka.api.schemas.Stop
+import ru.transport.threeka.api.schemas.navigation.Coord
+import ru.transport.threeka.api.schemas.navigation.Event
 import ru.transport.threeka.api.schemas.navigation.RouteReport
+import ru.transport.threeka.api.schemas.navigation.Stop
 import ru.transport.threeka.services.TokenManager
 import ru.transport.threeka.ui.ErrorCallback
 
@@ -43,12 +44,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _likedStop.value = index;
     }
 
+    private val _deletedEvent = MutableLiveData(-1)
+    val deletedEvent: LiveData<Int> get() = _deletedEvent
+
+    fun setDeletedEvent(index: Int) {
+        _deletedEvent.value = index;
+    }
+
     private val _dislikedStop = MutableLiveData(-1)
     val dislikedStop: LiveData<Int> get() = _dislikedStop
 
     fun setDislikedStop(index: Int) {
         _dislikedStop.value = index;
     }
+
+
+    private val _addedEvent = MutableLiveData<Event?>()
+    val addedEvent: LiveData<Event?> get() = _addedEvent
+
 
     private val _care = MutableLiveData(false)
     val care: LiveData<Boolean> get() = _care
@@ -89,10 +102,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val stops: LiveData<MutableList<Stop>> get() = _stops
     private var isStopsLoaded = false
 
+    private val _events = MutableLiveData<MutableList<Event>>()
+    val events: LiveData<MutableList<Event>> get() = _events
+
     fun replaceStop(index: Int, stop: Stop?) {
         if (stop != null) {
             _stops.value!![index] = stop
         }
+    }
+
+    fun replaceEvent(index: Int, event: Event?) {
+        if (event != null) {
+            _events.value!![index] = event
+        }
+    }
+
+    fun addEvent(event: Event) {
+        _events.value?.add(event)
+        _addedEvent.value = event
+    }
+
+
+    private val _clearPoint = MutableLiveData(0)
+    val clearPoint: LiveData<Int?> get() = _clearPoint
+
+    fun clearMapPoint() {
+        _clearPoint.value = 0;
     }
 
 
@@ -112,6 +147,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _stopFrom.value = null;
         _stopTo.value = null;
         _time.value = null;
+        _addedEvent.value = null
     }
 
 
@@ -162,6 +198,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return _stops.value?.get(index)?.like ?: false
     }
 
+    fun getEvent(index: Int): Event? {
+        return _events.value?.get(index)
+    }
+
+
     fun getStopId(index: Int): Int {
         return _stops.value?.get(index)?.id ?: -1
     }
@@ -204,8 +245,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         viewModelScope.launch {
             try {
-                val response = apiService.getStops(tokenManager.getAccessToken()).awaitResponse()
-                _stops.value = response.body()
+                val response1 = apiService.getStops(tokenManager.getAccessToken()).awaitResponse()
+                _stops.value = response1.body()
+                val response2 = apiService.getEvents(tokenManager.getAccessToken()).awaitResponse()
+                _events.value = response2.body()
                 isStopsLoaded = true
             } catch (e: Exception) {
                 Log.e("APIError", "Не удалось получить список остановок" + e.message)

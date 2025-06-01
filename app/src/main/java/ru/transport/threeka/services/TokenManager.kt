@@ -1,7 +1,7 @@
 package ru.transport.threeka.services
 
 import android.content.Context
-import ru.transport.threeka.api.schemas.Token
+import ru.transport.threeka.api.schemas.profile.Token
 
 class TokenManager(context: Context) {
     private val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)

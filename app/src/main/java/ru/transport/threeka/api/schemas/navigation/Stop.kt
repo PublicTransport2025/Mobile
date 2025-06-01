@@ -1,4 +1,4 @@
-package ru.transport.threeka.api.schemas
+package ru.transport.threeka.api.schemas.navigation
 
 data class Stop(
     val id: Int,

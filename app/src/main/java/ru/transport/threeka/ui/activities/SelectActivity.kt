@@ -87,7 +87,7 @@ class SelectActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = SelectAdapter(this, mutableListOf(), mutableListOf(), mutableListOf())
+        adapter = SelectAdapter(this, mutableListOf(), mutableListOf(), mutableListOf(), timestart)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -183,7 +183,7 @@ class SelectActivity : AppCompatActivity() {
                 rez_likes.add(true)
             }
         }
-        adapter.addButton(rez, rez_ids, rez_likes)
+        adapter.addButton(rez, rez_ids, rez_likes, timestart)
 
         inputBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -209,7 +209,7 @@ class SelectActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    adapter.addButton(rez, rez_ids, rez_likes)
+                    adapter.addButton(rez, rez_ids, rez_likes, timestart)
                 } else {
                     rez.clear()
                     rez_ids.clear()
@@ -221,7 +221,7 @@ class SelectActivity : AppCompatActivity() {
                             rez_likes.add(true)
                         }
                     }
-                    adapter.addButton(rez, rez_ids, rez_likes)
+                    adapter.addButton(rez, rez_ids, rez_likes, timestart)
                 }
             }
 
