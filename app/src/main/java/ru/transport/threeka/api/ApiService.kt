@@ -7,17 +7,20 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
-import ru.transport.threeka.api.schemas.Atp
-import ru.transport.threeka.api.schemas.Reg
-import ru.transport.threeka.api.schemas.ResetPass
-import ru.transport.threeka.api.schemas.ResponseMessage
-import ru.transport.threeka.api.schemas.Stop
-import ru.transport.threeka.api.schemas.Token
-import ru.transport.threeka.api.schemas.VKLogin
-import ru.transport.threeka.api.schemas.navigation.Feedback
+import ru.transport.threeka.api.schemas.navigation.Atp
+import ru.transport.threeka.api.schemas.navigation.Event
 import ru.transport.threeka.api.schemas.navigation.RouteReport
+import ru.transport.threeka.api.schemas.navigation.Stop
+import ru.transport.threeka.api.schemas.profile.EventPost
+import ru.transport.threeka.api.schemas.profile.Feedback
+import ru.transport.threeka.api.schemas.profile.Reg
+import ru.transport.threeka.api.schemas.profile.ResetPass
+import ru.transport.threeka.api.schemas.profile.ResponseMessage
+import ru.transport.threeka.api.schemas.profile.Token
+import ru.transport.threeka.api.schemas.profile.VKLogin
 
 interface ApiService {
     @GET("/api/stops/all")
@@ -36,6 +39,23 @@ interface ApiService {
         @Header("token") token: String,
         @Query("stop_id") stopId: Int
     ): Call<Stop>
+
+    @GET("/api/events/all")
+    fun getEvents(
+        @Header("token") token: String?
+    ): Call<MutableList<Event>>
+
+    @DELETE("/api/events/clear")
+    fun clearEvent(
+        @Header("token") token: String,
+        @Query("event_id") eventId: String
+    ): Call<Event>
+
+    @PATCH("/api/events/fix")
+    fun fixEvent(
+        @Header("token") token: String,
+        @Query("event_id") eventId: String
+    ): Call<Event>
 
     @GET("/api/navigation")
     fun createRoute(
@@ -88,4 +108,10 @@ interface ApiService {
         @Header("token") token: String,
         @Body feedback: Feedback
     ): Call<ResponseMessage>
+
+    @POST("/api/events/write")
+    fun writeEvent(
+        @Header("token") token: String,
+        @Body event: EventPost
+    ): Call<Event>
 }

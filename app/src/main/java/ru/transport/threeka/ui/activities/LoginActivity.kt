@@ -3,7 +3,6 @@ package ru.transport.threeka.ui.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -24,11 +23,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.transport.threeka.R
 import ru.transport.threeka.api.RetrofitClient.apiService
-import ru.transport.threeka.api.schemas.Reg
-import ru.transport.threeka.api.schemas.ResetPass
-import ru.transport.threeka.api.schemas.ResponseMessage
-import ru.transport.threeka.api.schemas.Token
-import ru.transport.threeka.api.schemas.VKLogin
+import ru.transport.threeka.api.schemas.profile.ResetPass
+import ru.transport.threeka.api.schemas.profile.ResponseMessage
+import ru.transport.threeka.api.schemas.profile.Token
+import ru.transport.threeka.api.schemas.profile.VKLogin
 import ru.transport.threeka.services.TokenManager
 import java.nio.charset.Charset
 import java.security.MessageDigest

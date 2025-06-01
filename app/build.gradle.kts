@@ -157,8 +157,11 @@ dependencies {
     implementation("com.vk.id:onetap-compose:2.3.1")
     implementation("com.vk.id:onetap-xml:2.3.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    
     implementation("io.appmetrica.analytics:analytics:7.9.0")
+
+
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

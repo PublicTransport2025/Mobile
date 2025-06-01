@@ -1,7 +1,5 @@
 package ru.transport.threeka.api.schemas.navigation
 
-import ru.transport.threeka.api.schemas.Coord
-
 data class RouteDouble(
     val label1: String,
     val number1: String,

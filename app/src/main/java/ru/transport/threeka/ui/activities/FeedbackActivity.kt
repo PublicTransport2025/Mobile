@@ -16,8 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.transport.threeka.R
 import ru.transport.threeka.api.RetrofitClient.apiService
-import ru.transport.threeka.api.schemas.ResponseMessage
-import ru.transport.threeka.api.schemas.navigation.Feedback
+import ru.transport.threeka.api.schemas.profile.ResponseMessage
+import ru.transport.threeka.api.schemas.profile.Feedback
 import ru.transport.threeka.services.TokenManager
 
 class FeedbackActivity : AppCompatActivity() {

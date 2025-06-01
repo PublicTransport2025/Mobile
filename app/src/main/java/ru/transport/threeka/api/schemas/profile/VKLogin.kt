@@ -1,4 +1,4 @@
-package ru.transport.threeka.api.schemas
+package ru.transport.threeka.api.schemas.profile
 
 data class VKLogin(
     val code_verifier: String,

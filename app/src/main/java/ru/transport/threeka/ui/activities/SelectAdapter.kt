@@ -14,7 +14,8 @@ class SelectAdapter(
     private val activity: Activity,
     private val buttons: MutableList<String>,
     private val indexes: MutableList<Int>,
-    private val icons: MutableList<Int>
+    private val icons: MutableList<Int>,
+    private var _time: Int
 ) :
     RecyclerView.Adapter<SelectAdapter.ButtonViewHolder>() {
 
@@ -38,6 +39,7 @@ class SelectAdapter(
         holder.button.setOnClickListener {
             val resultIntent = Intent()
             resultIntent.putExtra("stop_id", indexes[position])
+            resultIntent.putExtra("time", _time)
             activity.setResult(Activity.RESULT_OK, resultIntent)
             activity.finish()
         }
@@ -46,7 +48,8 @@ class SelectAdapter(
     override fun getItemCount(): Int = buttons.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addButton(text: List<String>, numbers: List<Int>, likes: List<Boolean>) {
+    fun addButton(text: List<String>, numbers: List<Int>, likes: List<Boolean>, time: Int) {
+        _time = time
         buttons.clear()
         buttons.addAll(text)
         indexes.clear()
