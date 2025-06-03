@@ -254,25 +254,23 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         supportFragmentManager.registerFragmentLifecycleCallbacks(
             object : FragmentManager.FragmentLifecycleCallbacks() {
                 override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
-                    if (f.id == R.id.fragment_container) {
-                        myButton1.visibility = View.VISIBLE
-                        myButton2.visibility = View.VISIBLE
-                    }
+                    myButton1.visibility = View.VISIBLE
+                    myButton2.visibility = View.VISIBLE
                 }
+
                 override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
                     myButton1.visibility = View.VISIBLE
                     myButton2.visibility = View.VISIBLE
                 }
+
                 override fun onFragmentViewCreated(
                     fm: FragmentManager,
                     f: Fragment,
                     v: View,
                     savedInstanceState: Bundle?
                 ) {
-                    if (f.id == R.id.fragment_container) {
-                        myButton1.visibility = View.GONE
-                        myButton2.visibility = View.GONE
-                    }
+                    myButton1.visibility = View.GONE
+                    myButton2.visibility = View.GONE
                 }
             }, true
         )
@@ -550,12 +548,12 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 )
 
 
-            }
-            if (route <= 0) {
+            } else if (route == 0) {
                 val existingFragment =
                     supportFragmentManager.findFragmentById(R.id.fragment_container)
                 if (existingFragment != null) {
-                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                    supportFragmentManager.beginTransaction().remove(existingFragment)
+                        .addToBackStack(null).commit()
                 }
                 if (polylineObject != null) {
                     mapView.mapWindow.map.mapObjects.remove(polylineObject!!)
@@ -565,9 +563,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     mapView.mapWindow.map.mapObjects.remove(polylineObject2!!)
                     polylineObject2 = null
                 }
-            }
-
-            if (route < 0) {
+                myButton1.visibility = View.VISIBLE
+                myButton2.visibility = View.VISIBLE
+            } else {
                 val existingFragment =
                     supportFragmentManager.findFragmentById(R.id.fragment_container)
                 if (existingFragment != null) {

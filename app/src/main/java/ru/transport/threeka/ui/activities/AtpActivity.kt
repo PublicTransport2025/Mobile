@@ -2,17 +2,10 @@ package ru.transport.threeka.ui.activities
 
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.transport.threeka.R
-import ru.transport.threeka.api.RetrofitClient.apiService
-import ru.transport.threeka.api.schemas.navigation.Atp
 
 class AtpActivity : AppCompatActivity() {
 
@@ -27,6 +20,7 @@ class AtpActivity : AppCompatActivity() {
             finish()
         }
 
+        /*
         val label: TextView = findViewById(R.id.textAtp)
         val phone: TextView = findViewById(R.id.phoneTextView)
         val report: TextView = findViewById(R.id.emailTextView)
@@ -61,6 +55,8 @@ class AtpActivity : AppCompatActivity() {
                 }
             }
         })
+
+        */
 
     }
 }

@@ -58,20 +58,25 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:layout_marginTop="20dp"
-        android:text="Пожалуйста, учитывайте, что сервис 3КА предоставляет данные
-о движении, ориентруясь на официальные (плановые) данные. Но существует целый ряд причин
-включая погодные условия, технические осмотры, режим работы водителей из-за которых
-транспорта не может быть на линии.\nВы можете уточнить данные в АТП:"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Приносим извинения за доставленные неудобства. Мы стремимся
+предоставлять точную информацию на основе официального расписания, но
+иногда возникают непредвиденные задержки. Если у вас возникли проблемы
+с транспортным обслуживанием, пожалуйста, оставьте жалобу по данному
+контакту (ссылка: https://eogpp-vrn.ru/index.php?r=site/contact).\n\nВаши отзывы помогают совершенствовать систему общественного
+транспорта в городе."
         android:textAppearance="@style/DefaultTextReverse"
         android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/textHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textHeader" />
+        app:layout_constraintWidth_percent="0.9" />
 
     <TextView
         android:id="@+id/phoneTextView"
@@ -86,7 +91,8 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textAtp" />
+        app:layout_constraintTop_toBottomOf="@+id/textAtp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/emailTextView"
@@ -99,6 +105,7 @@
         android:textAppearance="@style/DefaultTextReverse"
         android:textColorLink="@color/link"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
@@ -114,20 +121,54 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textAtp2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:layout_marginTop="16dp"
-        android:text="Жалобы в ЕОГПП"
+        android:text="Единый оператор\nгородских пассажирских перевозок:"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textSize="16sp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
+
+    <TextView
+        android:id="@+id/textAtp3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Приемная управления транспорта:"
         android:textAppearance="@style/DefaultTextReverse"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/phoneTextView2" />
+
+    <TextView
+        android:id="@+id/phoneTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="phone"
+        android:linksClickable="true"
+        android:text="@string/ut_phone"
+        android:textAppearance="@style/DefaultTextReverse"
+        android:textColorLink="@color/link"
+        android:textSize="16sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAtp3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
