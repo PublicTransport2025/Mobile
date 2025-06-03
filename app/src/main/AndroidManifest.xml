@@ -6,10 +6,10 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".MainApplication"
@@ -38,10 +38,14 @@
         <activity android:name="ru.transport.threeka.ui.activities.LoginActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.LoginErrorActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.RegActivity" />
+        <activity android:name="ru.transport.threeka.ui.activities.EditActivity" />
         <activity android:name="ru.transport.threeka.ui.activities.FeedbackActivity" />
-        <activity android:name="ru.transport.threeka.ui.activities.SelectActivity"
+        <activity
+            android:name="ru.transport.threeka.ui.activities.SelectActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <receiver android:name="ru.transport.threeka.services.AlarmReceiver"
+
+        <receiver
+            android:name="ru.transport.threeka.services.AlarmReceiver"
             android:exported="false" />
     </application>
 

@@ -34,6 +34,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var enteringButtons: LinearLayout
     private lateinit var notificationGroup: ConstraintLayout
     private lateinit var buttonLogout: Button
+    private lateinit var buttonEdit: Button
     private lateinit var buttonFeedback: Button
     private lateinit var tokenManager: TokenManager
 
@@ -46,6 +47,7 @@ class SettingsActivity : AppCompatActivity() {
                         header.text = tokenManager.getLogin()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        buttonEdit.visibility = View.VISIBLE
                         buttonFeedback.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
                         val eventParameters = mapOf("method" to "email")
@@ -54,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
                         header.text = tokenManager.getName()
                         enteringButtons.visibility = View.GONE
                         buttonLogout.visibility = View.VISIBLE
+                        buttonEdit.visibility = View.VISIBLE
                         buttonFeedback.visibility = View.VISIBLE
                         notificationGroup.visibility = View.VISIBLE
                         val eventParameters = mapOf("method" to "vk")
@@ -98,6 +101,13 @@ class SettingsActivity : AppCompatActivity() {
             val editor = sharedPref.edit()
             editor.putBoolean("notif", false)
             editor.apply()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (tokenManager.isVk()) {
+            header.text = tokenManager.getName()
         }
     }
 
@@ -241,6 +251,7 @@ class SettingsActivity : AppCompatActivity() {
         tokenManager = TokenManager(this)
 
         buttonLogout = findViewById(R.id.button_logout)
+        buttonEdit = findViewById(R.id.button_edit)
         buttonFeedback = findViewById(R.id.button_feedback)
 
         buttonFeedback.setOnClickListener {
@@ -262,6 +273,11 @@ class SettingsActivity : AppCompatActivity() {
             )
         }
 
+        buttonEdit.setOnClickListener {
+            val intent = Intent(this, EditActivity::class.java)
+            startActivity(intent)
+        }
+
         header = findViewById(R.id.settings_header)
         enteringButtons = findViewById(R.id.entering_buttons)
         notificationGroup = findViewById(R.id.notifiaction_group)
@@ -274,6 +290,7 @@ class SettingsActivity : AppCompatActivity() {
             enteringButtons.visibility = View.GONE
         } else {
             buttonLogout.visibility = View.GONE
+            buttonEdit.visibility = View.GONE
             buttonFeedback.visibility = View.GONE
             notificationGroup.visibility = View.GONE
         }
