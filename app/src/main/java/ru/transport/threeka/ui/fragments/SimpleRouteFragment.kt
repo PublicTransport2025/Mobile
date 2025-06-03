@@ -59,6 +59,15 @@ class SimpleRouteFragment : Fragment() {
             timeBegin.text = timeBeginStr
         }
 
+
+        val infoLabel = view.findViewById<TextView>(R.id.route_info)
+        val infoStr = viewModel.getRouteInfo()
+        if (infoStr == null) {
+            infoLabel.visibility = View.GONE
+        } else {
+            infoLabel.text = infoStr
+        }
+
         val timeLabel2 = view.findViewById<TextView>(R.id.time_label2)
         val timeRoad = view.findViewById<TextView>(R.id.time_road)
         val timeRoadStr = viewModel.getRouteTimeRoad()

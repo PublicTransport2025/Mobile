@@ -207,5 +207,21 @@ class DoubleRouteFragment : Fragment() {
             }
             buttonRight.visibility = View.VISIBLE
         }
+
+        val infoLabel1 = view.findViewById<TextView>(R.id.route_info1)
+        val infoStr1 = viewModel.getRouteInfo()
+        if (infoStr1 == null) {
+            infoLabel1.visibility = View.GONE
+        } else {
+            infoLabel1.text = infoStr1
+        }
+
+        val infoLabel2 = view.findViewById<TextView>(R.id.route_info2)
+        val infoStr2 = viewModel.getRouteInfoDouble()
+        if (infoStr2 == null) {
+            infoLabel2.visibility = View.GONE
+        } else {
+            infoLabel2.text = infoStr2
+        }
     }
 }

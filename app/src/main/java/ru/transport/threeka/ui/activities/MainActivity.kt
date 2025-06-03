@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.JsonElement
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.ScreenPoint
@@ -41,7 +42,11 @@ import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import io.appmetrica.analytics.AppMetrica
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.transport.threeka.R
+import ru.transport.threeka.api.RetrofitClient.apiService
 import ru.transport.threeka.data.MainViewModel
 import ru.transport.threeka.ui.ErrorCallback
 import ru.transport.threeka.ui.fragments.AdvFragment
@@ -103,6 +108,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     private val placemarksEvents = mutableListOf<PlacemarkMapObject>()
 
     private var pointCollection: MapObjectCollection? = null
+    private var vehicleCollection: MapObjectCollection? = null
 
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
@@ -301,6 +307,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         val imageProviderLiked = ImageProvider.fromResource(this, R.drawable.stop_liked)
         val imageProviderEvent = ImageProvider.fromResource(this, R.drawable.road_event)
         imageProviderPoint = ImageProvider.fromResource(this, R.drawable.point)
+        val imageProviderBus = ImageProvider.fromResource(this, R.drawable.position)
 
         stopsIconsCollection = mapView.mapWindow.map.mapObjects.addCollection()
         stopsIconsCollection!!.addTapListener(placemarkTapListener)
@@ -312,6 +319,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         stopsIconsCollectionEvents!!.addTapListener(placemarkTapListenerEvent)
 
         pointCollection = mapView.mapWindow.map.mapObjects.addCollection()
+        vehicleCollection = mapView.mapWindow.map.mapObjects.addCollection()
 
 
 
@@ -457,6 +465,35 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                         .commit()
                 }
 
+                if (vehicleCollection != null) {
+                    vehicleCollection!!.clear()
+                }
+                val call = apiService.getVehicles(viewModel.getRouteId())
+                call.enqueue(object : Callback<List<List<JsonElement>>> {
+                    override fun onResponse(
+                        call: Call<List<List<JsonElement>>>,
+                        response: Response<List<List<JsonElement>>>
+                    ) {
+                        if (response.isSuccessful) {
+                            val datas = response.body()
+                            if (datas != null) {
+                                runOnUiThread {
+                                    for (data in datas) {
+                                        vehicleCollection!!.addPlacemark().apply {
+                                            geometry =
+                                                Point(data[0].asDouble, data[1].asDouble)
+                                            setIcon(imageProviderBus)
+                                            zIndex = 100F
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<List<JsonElement>>>, t: Throwable) {}
+                })
+
                 val coords = viewModel.getRouteCoords()
                 val points = ArrayList<Point>()
                 for (coord in coords) {
@@ -489,9 +526,35 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     outlineColor = ContextCompat.getColor(this@MainActivity, R.color.white)
                 }
 
-                var geometry = Geometry.fromPolyline(polyline)
+                var route_geometry = Geometry.fromPolyline(polyline)
 
                 if (!viewModel.isSimple()) {
+
+                    val call2 = apiService.getVehicles(viewModel.getRouteIdDouble())
+                    call2.enqueue(object : Callback<List<List<JsonElement>>> {
+                        override fun onResponse(
+                            call: Call<List<List<JsonElement>>>,
+                            response: Response<List<List<JsonElement>>>
+                        ) {
+                            if (response.isSuccessful) {
+                                val datas = response.body()
+                                if (datas != null) {
+                                    runOnUiThread {
+                                        for (data in datas) {
+                                            vehicleCollection!!.addPlacemark().apply {
+                                                geometry = Point(data[0].asDouble, data[1].asDouble)
+                                                setIcon(imageProviderBus)
+                                                zIndex = 100F
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<List<JsonElement>>>, t: Throwable) {}
+                    })
+
                     val coords2 = viewModel.getRouteCoordsDouble()
                     val points2 = ArrayList<Point>()
                     for (coord in coords2) {
@@ -524,7 +587,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                         pointsFull.add(Point(coord.lat, coord.lon))
                     }
                     val polylineFull = Polyline(pointsFull)
-                    geometry = Geometry.fromPolyline(polylineFull)
+                    route_geometry = Geometry.fromPolyline(polylineFull)
 
                 }
 
@@ -537,12 +600,12 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     ),
                     ScreenPoint(
                         /* x = */ mapView.mapWindow.width().toFloat() * 0.95F,
-                        /* y = */ mapView.mapWindow.height().toFloat() * 0.5F,
+                        /* y = */ mapView.mapWindow.height().toFloat() * 0.75F,
                     )
                 )
 
                 mapView.mapWindow.map.move(
-                    mapView.mapWindow.map.cameraPosition(geometry),
+                    mapView.mapWindow.map.cameraPosition(route_geometry),
                     Animation(Animation.Type.SMOOTH, 0.5f), // Анимация перемещения
                     null
                 )
@@ -563,6 +626,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                     mapView.mapWindow.map.mapObjects.remove(polylineObject2!!)
                     polylineObject2 = null
                 }
+                if (vehicleCollection != null) {
+                    vehicleCollection!!.clear()
+                }
                 myButton1.visibility = View.VISIBLE
                 myButton2.visibility = View.VISIBLE
             } else {
@@ -574,6 +640,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 val fragment = NoRouteFragment()
                 supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                     .commit()
+                if (vehicleCollection != null) {
+                    vehicleCollection!!.clear()
+                }
             }
         })
 

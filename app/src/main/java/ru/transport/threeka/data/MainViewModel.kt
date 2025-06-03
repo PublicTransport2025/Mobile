@@ -320,6 +320,47 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    fun getRouteInfo(): String? {
+        if ((_acvtiveRoute.value ?: 0) - 1 < (_routeReport.value?.count_simple ?: 0)) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.info
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.info1
+        }
+    }
+
+    fun getRouteInfoDouble(): String? {
+        if (isSimple()) {
+            return null
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.info2
+        }
+    }
+
+    fun getRouteId(): Int {
+        if ((_acvtiveRoute.value ?: 0) - 1 < (_routeReport.value?.count_simple ?: 0)) {
+            return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.route_id ?: 0
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.route_id1 ?: 0
+        }
+    }
+
+    fun getRouteIdDouble(): Int {
+        if (isSimple()) {
+            return 0
+        } else {
+            return _routeReport.value?.double_routes?.get(
+                (_acvtiveRoute.value ?: 1) - 1 - (_routeReport.value?.count_simple ?: 0)
+            )?.route_id2 ?: 0
+        }
+    }
+
     fun getRouteNumber(): String {
         if (isSimple()) {
             return _routeReport.value?.simple_routes?.get((_acvtiveRoute.value ?: 1) - 1)?.number

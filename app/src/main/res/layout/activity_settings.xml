@@ -9,18 +9,43 @@
     android:orientation="vertical"
     tools:context="ru.transport.threeka.ui.activities.MainActivity">
 
-    <Button
-        android:id="@+id/button_back"
-        style="?attr/materialIconButtonFilledStyle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_back"
+            style="?attr/materialIconButtonFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="50dp"
-        android:textAppearance="@style/DefaultTextSmall"
-        app:backgroundTint="@color/akcent"
-        app:icon="@drawable/left_long"
-        app:iconTint="@color/button_text"/>
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:icon="@drawable/left_long"
+            app:iconTint="@color/button_text"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/button_edit"
+            style="?attr/materialIconButtonFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp"
+            android:textAppearance="@style/DefaultTextSmall"
+            app:backgroundTint="@color/akcent"
+            app:icon="@drawable/edit"
+            app:iconTint="@color/button_text"/>
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/settings_header"

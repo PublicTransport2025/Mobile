@@ -1,5 +1,6 @@
 package ru.transport.threeka.api
 
+import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -114,4 +115,15 @@ interface ApiService {
         @Header("token") token: String,
         @Body event: EventPost
     ): Call<Event>
+
+    @PATCH("/api/auth/name")
+    fun changeName(
+        @Header("token") token: String,
+        @Query("name") name: String
+    ): Call<Token>
+
+    @GET("/codd/transport")
+    fun getVehicles(
+        @Query("route_id") routeId: Int
+    ): Call<List<List<JsonElement>>>
 }

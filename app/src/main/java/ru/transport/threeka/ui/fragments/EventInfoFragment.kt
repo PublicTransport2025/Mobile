@@ -67,7 +67,7 @@ class EventInfoFragment : Fragment() {
         val markView = view.findViewById<TextView>(R.id.view_mark)
 
 
-        val eventTypes = arrayOf("ДТП", "Дорожные работы", "Перекрытие движения")
+        val eventTypes = arrayOf("ДТП", "Дорожные работы", "Перекрытие движения", "Затор", "Неблагоприятные погодные условия", "Опасность на дороге")
         val eventLines = arrayOf("Правая полоса", "2 полоса", "3 полоса", "4 полоса", "Вся дорога")
         val eventMarks = arrayOf(
             "Модерация",

@@ -69,7 +69,7 @@ class PointInfoFragment : Fragment() {
         }
     }
 
-    private val eventTypes = arrayOf("ДТП", "Дорожные работы", "Перекрытие движения")
+    private val eventTypes = arrayOf("ДТП", "Дорожные работы", "Перекрытие движения", "Затор", "Неблагоприятные погодные условия", "Опасность на дороге")
     private val eventLines = arrayOf("1 (в т.ч. выделенка)", "2", "3", "4", "все")
 
     private fun showOptionsDialog(context: Context) {
