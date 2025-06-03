@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/fragment_background"
@@ -124,18 +125,28 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <TextView
+                            android:id="@+id/route_load"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="Низкая"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
 
-
-                    <TextView
-                        android:id="@+id/route_load"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:text="Низкая"
-                        android:textColor="@color/akcent"
-                        android:textSize="14sp" />
+                        <ImageView
+                            android:id="@+id/myImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/people" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -150,6 +161,7 @@
                 android:text="Пушкинская"
                 android:textAppearance="@style/DefaultTextReverse"
                 android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/stop_second"
                 android:layout_width="wrap_content"
@@ -175,6 +187,17 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/route_number_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/gilroy"
+                        android:text="45"
+                        android:textColor="@color/akcent"
+                        android:textSize="45sp" />
+
+                    <TextView
                         android:id="@+id/route_title_second"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -185,16 +208,7 @@
                         android:textAppearance="@style/DefaultTextReverse"
                         android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/route_number_second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="0dp"
-                        android:fontFamily="@font/gilroy"
-                        android:text="45"
-                        android:textColor="@color/akcent"
-                        android:textSize="45sp" />
+
                 </LinearLayout>
 
 
@@ -255,16 +269,30 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/route_load_second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:fontFamily="@font/gilroy_bold"
-                        android:text="Низкая"
-                        android:textColor="@color/akcent"
-                        android:textSize="14sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/route_load_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:fontFamily="@font/gilroy_bold"
+                            android:text="Низкая"
+                            android:textColor="@color/akcent"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/myImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/people" />
+                    </LinearLayout>
                 </LinearLayout>
+
 
             </LinearLayout>
         </LinearLayout>

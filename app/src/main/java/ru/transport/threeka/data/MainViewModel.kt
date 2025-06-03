@@ -127,7 +127,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val clearPoint: LiveData<Int?> get() = _clearPoint
 
     fun clearMapPoint() {
-        _clearPoint.value = 0;
+        _clearPoint.value = 3;
     }
 
 

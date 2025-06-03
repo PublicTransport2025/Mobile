@@ -81,7 +81,7 @@ class RegActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Укажите корректный email-адрес"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
@@ -144,7 +144,7 @@ class RegActivity : AppCompatActivity() {
                 ) {
                     intentError.putExtra(
                         "error",
-                        "Укажите корректный email-адрес, иначе не получится восстановить пароль"
+                        "Неверный формат электронной почты"
                     )
                     startActivity(intentError)
                     return@setOnEditorActionListener false
@@ -215,7 +215,7 @@ class RegActivity : AppCompatActivity() {
                                     403 -> "Этот аккаунт заблокирован"
                                     401 -> "Неверный логин или пароль"
                                     480 -> "Вы не запросили код подтверждения"
-                                    481 -> "Неверный код подтверждения"
+                                    481 -> "Код неверный, попробуйте еще раз"
                                     482 -> "Код подтверждения просрочен"
                                     500 -> "Приносим свои извенения, произошла ошибка на сервере"
                                     502 -> "Пожалуйста, попробуйте позднее"
@@ -262,7 +262,7 @@ class RegActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Укажите корректный email-адрес, иначе не получится восстановить пароль"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
@@ -333,7 +333,7 @@ class RegActivity : AppCompatActivity() {
                                 403 -> "Этот аккаунт заблокирован"
                                 401 -> "Неверный логин или пароль"
                                 480 -> "Вы не запросили код подтверждения"
-                                481 -> "Неверный код подтверждения"
+                                481 -> "Код неверный, попробуйте еще раз"
                                 482 -> "Код подтверждения просрочен"
                                 500 -> "Приносим свои извенения, произошла ошибка на сервере"
                                 502 -> "Пожалуйста, попробуйте позднее"

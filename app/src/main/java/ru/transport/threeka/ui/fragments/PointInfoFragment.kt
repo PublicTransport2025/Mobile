@@ -99,8 +99,8 @@ class PointInfoFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        viewModel.clearMapPoint()
         super.onDestroyView()
+        viewModel.clearMapPoint()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
