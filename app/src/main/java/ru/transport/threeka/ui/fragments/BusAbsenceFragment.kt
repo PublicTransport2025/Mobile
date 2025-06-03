@@ -36,12 +36,13 @@ class BusAbsenceFragment : Fragment() {
                 .commit()
         }
 
+        val buttonLeft = view.findViewById<ImageButton>(R.id.button_left)
+        buttonLeft.setOnClickListener {
+            viewModel.awakeRoute()
+        }
 
         val buttonFrom = view.findViewById<Button>(R.id.button_no_bus)
         buttonFrom.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .remove(this)
-                .commit()
             val eventParameters = mapOf("number" to viewModel.getRouteNumber())
             AppMetrica.reportEvent("BusAbsence", eventParameters)
             val intent = Intent(requireContext(), AtpActivity::class.java)

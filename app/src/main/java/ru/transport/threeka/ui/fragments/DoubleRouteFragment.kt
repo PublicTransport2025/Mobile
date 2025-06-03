@@ -129,11 +129,18 @@ class DoubleRouteFragment : Fragment() {
         }
 
         val buttonRight = view.findViewById<ImageButton>(R.id.button_right)
-        buttonRight.setOnClickListener {
-            viewModel.right()
-        }
-        if (!viewModel.hasRight()) {
-            buttonRight.visibility = View.INVISIBLE
+        if (viewModel.hasRight()) {
+            buttonRight.setOnClickListener {
+                viewModel.right()
+            }
+        } else {
+            buttonRight.setOnClickListener {
+                val newFragment = BusAbsenceFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, newFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
 
         val buttonNo = view.findViewById<Button>(R.id.button_no)
@@ -185,11 +192,20 @@ class DoubleRouteFragment : Fragment() {
                 )
             AppMetrica.reportEvent("RouteStarted", eventParameters)
 
-            val newFragment = BusAbsenceFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newFragment)
-                .addToBackStack(null)
-                .commit()
+            buttonOk.visibility = View.GONE
+            buttonNo.visibility = View.GONE
+            buttonLeft.visibility = View.GONE
+            buttonRight.visibility = View.GONE
+        }
+
+        val root = view.findViewById<View>(R.id.root_container)
+        root.setOnClickListener {
+            buttonOk.visibility = View.VISIBLE
+            buttonNo.visibility = View.VISIBLE
+            if (viewModel.hasLeft()) {
+                buttonLeft.visibility = View.VISIBLE
+            }
+            buttonRight.visibility = View.VISIBLE
         }
     }
 }

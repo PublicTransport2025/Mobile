@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/fragment_background"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/root_container">
 
 
     <LinearLayout

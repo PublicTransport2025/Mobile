@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -20,6 +19,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.yandex.mapkit.Animation
@@ -102,7 +103,6 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
     private val placemarksEvents = mutableListOf<PlacemarkMapObject>()
 
     private var pointCollection: MapObjectCollection? = null
-    private var thePoint: PlacemarkMapObject? = null
 
 
     private val cameraListener = CameraListener { _, newPosition, _, _ ->
@@ -115,6 +115,9 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         }
     }
 
+    private lateinit var myButton1: Button
+    private lateinit var myButton2: Button
+
     val inputListener = object : InputListener {
         override fun onMapTap(map: Map, point: Point) {
             // Handle single tap ...
@@ -123,20 +126,27 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         override fun onMapLongTap(map: Map, point: Point) {
             if (stopsIconsCollection?.isVisible ?: false) {
 
-                thePoint = pointCollection!!.addPlacemark().apply {
-                    geometry = Point(point.latitude, point.longitude)
-                    setIcon(imageProviderPoint)
-                }
+                val fragment = PointInfoFragment.newInstance(point.latitude, point.longitude)
 
                 val existingFragment =
                     supportFragmentManager.findFragmentById(R.id.fragment_container)
                 if (existingFragment != null) {
-                    supportFragmentManager.beginTransaction().remove(existingFragment).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment).commitNow()
+                    myButton1.visibility = View.GONE
+                    myButton2.visibility = View.GONE
+                } else {
+                    supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+                        .commit()
                 }
 
-                val fragment = PointInfoFragment.newInstance(point.latitude, point.longitude)
-                supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
-                    .commit()
+                if (pointCollection != null) {
+                    pointCollection!!.clear()
+                    pointCollection!!.addPlacemark().apply {
+                        geometry = Point(point.latitude, point.longitude)
+                        setIcon(imageProviderPoint)
+                    }
+                }
             } else {
                 Toast.makeText(this@MainActivity, "Увеличьте масштаб карты", Toast.LENGTH_SHORT)
                     .show()
@@ -236,6 +246,37 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
         viewModel.setChange(sharedPref.getBoolean("change", false))
         viewModel.setNotif(sharedPref.getBoolean("notif", false))
         viewModel.setPriority(sharedPref.getInt("priority", 0))
+
+        myButton1 = findViewById(R.id.myButton1)
+        myButton2 = findViewById(R.id.myButton2)
+        val timeLabel: TextView = findViewById(R.id.time_header)
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(
+            object : FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
+                    if (f.id == R.id.fragment_container) {
+                        myButton1.visibility = View.VISIBLE
+                        myButton2.visibility = View.VISIBLE
+                    }
+                }
+                override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
+                    myButton1.visibility = View.VISIBLE
+                    myButton2.visibility = View.VISIBLE
+                }
+                override fun onFragmentViewCreated(
+                    fm: FragmentManager,
+                    f: Fragment,
+                    v: View,
+                    savedInstanceState: Bundle?
+                ) {
+                    if (f.id == R.id.fragment_container) {
+                        myButton1.visibility = View.GONE
+                        myButton2.visibility = View.GONE
+                    }
+                }
+            }, true
+        )
+
 
         MapKitFactory.initialize(this)
         mapView = findViewById(R.id.mapview)
@@ -343,15 +384,15 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
                 val placemark = stopsIconsCollection!!.addPlacemark().apply {
                     geometry = Point(lat, lon)
                     userData = index
-                    setIcon(imageProviderEvent)
+                    setIcon(imageProvider)
                 }
                 placemarks[index] = placemark
             }
         })
 
         viewModel.clearPoint.observe(this, Observer { index ->
-            if (thePoint != null) {
-                pointCollection!!.remove(thePoint!!)
+            if (pointCollection != null) {
+                pointCollection!!.clear()
             }
         })
 
@@ -373,47 +414,7 @@ class MainActivity : AppCompatActivity(), ErrorCallback {
             }
         })
 
-        /*viewModel.likedStop.observe(this, Observer { index ->
-            for (i in placemarks.indices) {
-                if (index == placemarks[i].userData) {
-                    val lon = placemarks[i].geometry.longitude
-                    val lat = placemarks[i].geometry.latitude
-                    stopsIconsCollection!!.remove(placemarks[i])
-                    val placemark = stopsIconsCollectionLikes!!.addPlacemark().apply {
-                        geometry = Point(lat, lon)
-                        userData = index
-                        setIcon(imageProviderLiked)
-                    }
-                    placemarksLikes.add(placemark)
-                    placemarks.remove(placemarks[i])
-                    break
 
-                    placemarks.set
-                }
-            }
-        })
-
-        viewModel.dislikedStop.observe(this, Observer { index ->
-            for (i in placemarksLikes.indices) {
-                if (index == placemarksLikes[i].userData) {
-                    val lon = placemarksLikes[i].geometry.longitude
-                    val lat = placemarksLikes[i].geometry.latitude
-                    stopsIconsCollectionLikes!!.remove(placemarksLikes[i])
-                    val placemark = stopsIconsCollection!!.addPlacemark().apply {
-                        geometry = Point(lat, lon)
-                        userData = index
-                        setIcon(imageProvider)
-                    }
-                    placemarks.add(placemark)
-                    placemarksLikes.remove(placemarksLikes[i])
-                    break
-                }
-            }
-        })*/
-
-        val myButton1: Button = findViewById(R.id.myButton1)
-        val myButton2: Button = findViewById(R.id.myButton2)
-        val timeLabel: TextView = findViewById(R.id.time_header)
 
         viewModel.time.observe(this, { time ->
             if (time == null) {
