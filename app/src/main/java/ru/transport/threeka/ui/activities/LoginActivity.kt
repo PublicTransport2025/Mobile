@@ -95,7 +95,10 @@ class LoginActivity : AppCompatActivity() {
 
             val call = apiService.getResetCode(inputLogin.text.toString())
             call.enqueue(object : Callback<ResponseMessage> {
-                override fun onResponse(call: Call<ResponseMessage>, response: Response<ResponseMessage>) {
+                override fun onResponse(
+                    call: Call<ResponseMessage>,
+                    response: Response<ResponseMessage>
+                ) {
                     if (response.isSuccessful) {
                         runOnUiThread {
                             Toast.makeText(
@@ -107,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         runOnUiThread {
                             val message = when (response.code()) {
-                                400 -> "Такой e-mail не был зарегестрирован"
+                                400 -> "Такой почты нет в системе"
                                 422 -> "Некорректный адрес электронной почты"
                                 419 -> "Код был отправлен ранее. Запросить новый можно через 5 минут"
                                 500 -> "Отправка кода подтверждения сейчас невозможна. Пожалуйста, авторизируйтесь другим способом"
@@ -122,7 +125,10 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
                     runOnUiThread {
-                        intentError.putExtra("error", "Отправка кода подтверждения сейчас невозможна. Пожалуйста, авторизируйтесь другим способом")
+                        intentError.putExtra(
+                            "error",
+                            "Отправка кода подтверждения сейчас невозможна. Пожалуйста, авторизируйтесь другим способом"
+                        )
                         startActivity(intentError)
                     }
                 }
@@ -166,7 +172,10 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<Token>, t: Throwable) {
                         runOnUiThread {
-                            intentError.putExtra("error", "Возникла проблема с интернет соединением")
+                            intentError.putExtra(
+                                "error",
+                                "Возникла проблема с интернет соединением"
+                            )
                             startActivity(intentError)
                         }
                     }
@@ -275,7 +284,7 @@ class LoginActivity : AppCompatActivity() {
                             runOnUiThread {
                                 val message = when (response.code()) {
                                     422 -> "Еще раз проверьте заполненность всех полей"
-                                    400 -> "Такой email не был зарегестрирован"
+                                    400 -> "Такой почты нет в системе"
                                     403 -> "Этот аккаунт заблокирован"
                                     401 -> "Неверный логин или пароль"
                                     480 -> "Вы не запросили код подтверждения"
@@ -293,7 +302,10 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<Token>, t: Throwable) {
                         runOnUiThread {
-                            intentError.putExtra("error", "Возникла проблема с интернет соединением")
+                            intentError.putExtra(
+                                "error",
+                                "Возникла проблема с интернет соединением"
+                            )
                             startActivity(intentError)
                         }
                     }
@@ -303,7 +315,6 @@ class LoginActivity : AppCompatActivity() {
                 false
             }
         }
-
 
 
         val buttonReset: Button = findViewById(R.id.button_reset)
@@ -359,7 +370,7 @@ class LoginActivity : AppCompatActivity() {
                         runOnUiThread {
                             val message = when (response.code()) {
                                 422 -> "Еще раз проверьте заполненность всех полей"
-                                400 -> "Такой email не был зарегестрирован"
+                                400 -> "Такой почты нет в системе"
                                 403 -> "Этот аккаунт заблокирован"
                                 401 -> "Неверный логин или пароль"
                                 480 -> "Вы не запросили код подтверждения"
@@ -406,9 +417,12 @@ class LoginActivity : AppCompatActivity() {
 
         findViewById<OneTap>(R.id.vkidButton).setCallbacks(
             onAuth = { _, _ -> },
-            onFail = {_, _ ->
+            onFail = { _, _ ->
                 runOnUiThread {
-                    intentError.putExtra("error", "Авторизация через ВК сейчас недоступна. Пожалуйста, воспользуйтесь другим способом")
+                    intentError.putExtra(
+                        "error",
+                        "Авторизация через ВК сейчас недоступна. Пожалуйста, воспользуйтесь другим способом"
+                    )
                     startActivity(intentError)
                 }
             },
@@ -453,7 +467,10 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<Token>, t: Throwable) {
                         runOnUiThread {
-                            intentError.putExtra("error", "Возникла проблема с интернет соединением")
+                            intentError.putExtra(
+                                "error",
+                                "Возникла проблема с интернет соединением"
+                            )
                             startActivity(intentError)
                         }
                     }
