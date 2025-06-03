@@ -108,7 +108,7 @@ class FeedbackActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Пожалуйста, укажите адрес электронной почты для связи"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener

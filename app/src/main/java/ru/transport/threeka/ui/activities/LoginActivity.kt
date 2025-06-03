@@ -87,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Укажите корректный email-адрес"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener

@@ -81,7 +81,7 @@ class RegActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Укажите корректный email-адрес"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
@@ -144,7 +144,7 @@ class RegActivity : AppCompatActivity() {
                 ) {
                     intentError.putExtra(
                         "error",
-                        "Укажите корректный email-адрес, иначе не получится восстановить пароль"
+                        "Неверный формат электронной почты"
                     )
                     startActivity(intentError)
                     return@setOnEditorActionListener false
@@ -262,7 +262,7 @@ class RegActivity : AppCompatActivity() {
             ) {
                 intentError.putExtra(
                     "error",
-                    "Укажите корректный email-адрес, иначе не получится восстановить пароль"
+                    "Неверный формат электронной почты"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
