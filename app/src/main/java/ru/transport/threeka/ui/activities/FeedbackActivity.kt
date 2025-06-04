@@ -30,8 +30,8 @@ class FeedbackActivity : AppCompatActivity() {
         onConfirm: () -> Unit,
     ) {
         AlertDialog.Builder(context)
-            .setTitle("Спасибо!")
-            .setMessage("Ваш отзыв сохранен")
+            .setTitle("Сохранено")
+            .setMessage("Спасибо за Ваш отзыв")
             .setPositiveButton("Ок") { dialog, _ ->
                 onConfirm()
                 dialog.dismiss()
@@ -96,7 +96,7 @@ class FeedbackActivity : AppCompatActivity() {
             if (inputName.text.toString().isBlank()) {
                 intentError.putExtra(
                     "error",
-                    "Пожалуйста, укажите как к Вам обращаться"
+                    "Введите имя"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
@@ -117,7 +117,7 @@ class FeedbackActivity : AppCompatActivity() {
             if (inputAbout.text.toString().isBlank()) {
                 intentError.putExtra(
                     "error",
-                    "Пожалуйста, заполните текст содержания отзыва"
+                    "Введите Ваш отзыв"
                 )
                 startActivity(intentError)
                 return@setOnClickListener
